@@ -17,16 +17,15 @@ public class MainControl : MonoBehaviour
 
         UIManager.hideAllUI();
 
-        StartCoroutine(_init());
+        _init();
     }
 
-    private IEnumerator _init()
+    private void _init()
     {
         UIManager.init(ui_root);
 
-        yield break;
+        UIManager.show<UIStage>();
     }
-
 
     public void OnDestory()
     {
