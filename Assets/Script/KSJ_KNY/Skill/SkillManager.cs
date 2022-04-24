@@ -53,6 +53,36 @@ public class SkillManager : MonoBehaviour
         }
     }
 
+    public void UseSkill(int skillID, int _casterInstanceID, int _targetInstanceID)
+    {
+
+        Debug.Log($"{_casterInstanceID}가 {_targetInstanceID}에게 {skillID}를 사용함.");
+
+        switch (GetSkillData(skillID).skillCenterPoint)
+        {
+            case SkillCenterPoint.Target:
+                _judgmentObjectPoolMgr.ActiveSkill(skillID, _casterInstanceID, _targetInstanceID);
+                break;
+                
+            case SkillCenterPoint.TargetLocation:
+                break;
+
+            default:
+                break;
+        }
+        /*
+        if (_skillDataBase.GetSkillData(_id).areaForm.HasFlag(SkillAreaForm.Area))
+        {
+            _judgmentObjectPoolMgr.ActiveSkill(_id, _casterInstanceID, _pivotPosition, _pivotRotation);
+        }
+        else if (_skillDataBase.GetSkillData(_id).areaForm.HasFlag(SkillAreaForm.Projectile))
+        {
+            //_projectilePoolMgr.ActiveSkill(_id, _casterInstanceID, _pivotPosition, _pivotRotation);
+        }*/
+    }
+
+
+
     //SkillDB를 통해 외부에 스킬정보 반환 
     public SkillData GetSkillData(int _id)
     {

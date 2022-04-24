@@ -14,13 +14,7 @@ public class UnitController : MonoBehaviour
 {
     Transform tr;
     GameObject go;
-
-    public int PosZ { get; set; }
-    public int PosX { get; set; }
-
-    public int DestZ { get;  set; }
-    public int DestX { get;  set; }
-
+    
     public Vector3 _nextMovePos;
     public float _moveSpeed = 2.0f;
 
@@ -28,6 +22,7 @@ public class UnitController : MonoBehaviour
 
     Define.State _state = Define.State.Idle;
 
+    InstanceIDContainer _targetContainer;
     Transform _targetTransform;
     Vector3 _nextUnitMovePos;
 
@@ -43,7 +38,7 @@ public class UnitController : MonoBehaviour
         _action = GetComponent<UnitAction>();
         _status = GetComponent<UnitStatus>();
 
-        TileManager.Instance.SetUnitTilePosition((int)tr.position.x, (int)tr.position.z, tr.GetInstanceID());
+        TileManager.Instance.SetUnitTilePosition((int)tr.position.x, (int)tr.position.z, go.GetInstanceID());
     }
 
     void Update()
@@ -67,7 +62,7 @@ public class UnitController : MonoBehaviour
                         break;
                     case Define.State.Attack:
                         {
-                            Debug.Log($"{this.go.name}On Attack!");
+                            AttackAction();
                         }
                         break;
                     default:
@@ -78,17 +73,34 @@ public class UnitController : MonoBehaviour
     }
 
 
+    void MoveAction()
+    {
+        _nextUnitMovePos = UnitManager.Instance.NextPos(go.GetInstanceID(), _targetContainer.targetInstanceID);
+
+        TileManager.Instance.SetUnitTilePosition((int)_nextUnitMovePos.x, (int)_nextUnitMovePos.z, go.GetInstanceID());
+
+        _action.Move(_nextUnitMovePos);
+    }
+
+    void AttackAction()
+    {
+        _action.Attack(_targetContainer.targetInstanceID, _status.normalSkillID);
+    }
+
+
 
     private Define.State Root()
     {
-        _targetTransform = UnitManager.Instance.TargetFinder(go.GetInstanceID(), SkillManager.Instance.GetSkillData(_status.normalSkillID));
+        //Å¸°Ù °Ë»ö
+        _targetContainer = UnitManager.Instance.TargetFinder(go.GetInstanceID(), SkillManager.Instance.GetSkillData(_status.normalSkillID));
 
-        if (_targetTransform == null)
+        if (!_targetContainer.isExist)
         {
             return Idle();
         }            
 
-        if (Vector3.Distance(transform.position, _targetTransform.position) <= 1.45f)
+        if (Vector3.Distance(transform.position, UnitManager.Instance.GetUnitPosition(_targetContainer.targetInstanceID)) 
+            <= SkillManager.Instance.GetSkillData(_status.normalSkillID).skillRange)
         {
             return Attack();
         }
@@ -112,13 +124,5 @@ public class UnitController : MonoBehaviour
     {
         return Define.State.Attack;
     }
- 
-    void MoveAction()
-    {               
-        _nextUnitMovePos = UnitManager.Instance.NextPos(tr.GetInstanceID(), _targetTransform.GetInstanceID());
 
-        TileManager.Instance.SetUnitTilePosition((int)_nextUnitMovePos.x, (int)_nextUnitMovePos.z, tr.GetInstanceID());
-
-        _action.Move(_nextUnitMovePos);       
-    }
 }

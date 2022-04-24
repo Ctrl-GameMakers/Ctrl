@@ -3,16 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AstarManager : MonoBehaviour
+public class AstarCalculater : MonoBehaviour
 {
-    static AstarManager s_instance;
-    public static AstarManager Instance
+    static AstarCalculater s_instance;
+    public static AstarCalculater Instance
     {
         get
         {
             if (s_instance == null)
             {
-                s_instance = FindObjectOfType<AstarManager>();
+                s_instance = FindObjectOfType<AstarCalculater>();
             }
             return s_instance;
         }

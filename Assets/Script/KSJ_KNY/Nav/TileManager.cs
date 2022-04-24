@@ -12,7 +12,6 @@ public class TileManager : MonoBehaviour
             if (s_instance == null)
             {
                 s_instance = FindObjectOfType<TileManager>();
-                Debug.Log("New Board!");
             }
             return s_instance;
         }

@@ -28,12 +28,28 @@ public class JudgmentObjectPoolMgr : MonoBehaviour
     //>> 추후 제작해 둔 Pool이 모두 사용중인 경우 추가 Pool을 생성하는 코드 필요
     public void ActiveSkill(int _id, int _casterInstanceID, Vector3 _position, Quaternion _rotation)
     {
-        if(judgmentObjectQueue.Count.Equals(0))
+        ChkjudgmentObjectQueue();
+
+        //judgmentObjectQueue.Dequeue().ActiveSkill(_id, _casterInstanceID, _position, _rotation);
+    }
+
+    public void ActiveSkill(int skillID, int casterInstanceID, int targetInstanceID)
+    {
+        ChkjudgmentObjectQueue();
+        judgmentObjectQueue.Dequeue().ActiveSkill(skillID, casterInstanceID, targetInstanceID);
+    }
+
+    private void ChkjudgmentObjectQueue()
+    {
+        if (judgmentObjectQueue.Count.Equals(0))
         {
             judgmentObjectList.Add(Instantiate(judgmentObject, transform).GetComponent<JudgmentObject>());
             judgmentObjectQueue.Enqueue(judgmentObjectList[judgmentObjectList.Count - 1]);
         }
+    }
 
-        //judgmentObjectQueue.Dequeue().ActiveSkill(_id, _casterInstanceID, _position, _rotation);
+    public void EnqueueObject(JudgmentObject judgmentObject)
+    {
+        judgmentObjectQueue.Enqueue(judgmentObject);
     }
 }

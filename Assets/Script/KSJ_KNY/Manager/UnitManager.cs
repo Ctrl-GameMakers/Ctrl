@@ -24,7 +24,6 @@ public class UnitManager : MonoBehaviour
             if (s_instance == null)
             {
                 s_instance = FindObjectOfType<UnitManager>();
-                Debug.Log("find UnitManager");
             }
             return s_instance;
         }
@@ -35,12 +34,13 @@ public class UnitManager : MonoBehaviour
     private bool _isBattleMode;
     public bool isBattleMode { get => _isBattleMode; }
 
-    private Dictionary<int, UnitInformation> dic = new Dictionary<int, UnitInformation>();
+    private Dictionary<int, UnitInformation> battleUnitDic = new Dictionary<int, UnitInformation>();
 
     private TargetFinder targetFinder;
 
     private Pos myTilePos;
     private Pos targetTilePos;
+
 
     void Start()
     {
@@ -62,7 +62,7 @@ public class UnitManager : MonoBehaviour
         {
             if (_controllerList[i].unitController._onField)
             {
-                dic.Add(_controllerList[i].unit.GetInstanceID(), _controllerList[i]);
+                battleUnitDic.Add(_controllerList[i].unit.GetInstanceID(), _controllerList[i]);
             }
         }
         _isBattleMode = true;
@@ -73,14 +73,21 @@ public class UnitManager : MonoBehaviour
         _controllerList.Add(new UnitInformation(controller.gameObject, controller.transform, controller, controller.GetComponent<UnitStatus>()));
     }
 
-    public Transform TargetFinder(int instanceID, SkillData skillData)
+    public Vector3 GetUnitPosition(int instanceID)
     {
-        return targetFinder.TargetUnitFinder(instanceID, dic, skillData.targetRange, skillData.targetGroup, skillData.targetSortingBase);
+        return battleUnitDic[instanceID].transform.position;
+    }
+    
+
+    public InstanceIDContainer TargetFinder(int instanceID, SkillData skillData)
+    {
+        return targetFinder.TargetUnitFinder(instanceID, battleUnitDic, skillData.targetRange, skillData.targetGroup, skillData.targetSortingBase);
     }
 
+    #region Astar Nav
     public Vector3 NextPos(int posZ, int posX, int destZ, int destX)
     {
-        List<AstarManager.Pos> myPoints = AstarManager.Instance.FindAstar(posZ, posX, destZ, destX);
+        List<AstarCalculater.Pos> myPoints = AstarCalculater.Instance.FindAstar(posZ, posX, destZ, destX);
 
         return new Vector3(myPoints[1].x, 0, myPoints[1].z);
     }
@@ -93,7 +100,9 @@ public class UnitManager : MonoBehaviour
 
         Debug.Log($"{myInstanceID} 위치 = {myTilePos.x}, {myTilePos.z} // {targetInstanceID} 위치 = {targetTilePos.x}, {targetTilePos.z}" );
 
-        List<AstarManager.Pos> myPoints = AstarManager.Instance.FindAstar(myTilePos.x, myTilePos.z, targetTilePos.x, targetTilePos.z);
+        List<AstarCalculater.Pos> myPoints = AstarCalculater.Instance.FindAstar(myTilePos.x, myTilePos.z, targetTilePos.x, targetTilePos.z);
+
+        Debug.Log("dqdqd");
 
         if(myPoints.Count <= 2)
         {
@@ -105,4 +114,5 @@ public class UnitManager : MonoBehaviour
         }
 
     }
+    #endregion
 }

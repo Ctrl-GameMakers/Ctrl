@@ -3,6 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+public struct InstanceIDContainer
+{
+    private int _targetInstanceID;
+    private bool _isExist;
+
+    public int targetInstanceID { get => _targetInstanceID; }
+    public bool isExist { get => _isExist; }
+
+    public InstanceIDContainer(int targetInstanceID, bool isExist) { _targetInstanceID = targetInstanceID; _isExist = isExist; }
+}
 
 
 public class TargetFinder : MonoBehaviour
@@ -27,7 +37,7 @@ public class TargetFinder : MonoBehaviour
     TargetInfo tempTargetFind;
     float value;
 
-    public Transform TargetUnitFinder(int myinstanceID, Dictionary<int, UnitManager.UnitInformation> dic, int targetRange, SkillUnitGroup targetGroup, SkillUnitSortingBase sortingBase)
+    public InstanceIDContainer TargetUnitFinder(int myinstanceID, Dictionary<int, UnitManager.UnitInformation> dic, int targetRange, SkillUnitGroup targetGroup, SkillUnitSortingBase sortingBase)
     {
         //지역변수 초기화
         tempTargetFind.Clear();
@@ -44,7 +54,6 @@ public class TargetFinder : MonoBehaviour
         {
             if (testDic.Key != myinstanceID)
             {
-                Debug.Log(myinstanceID);
                 //타겟 탐색범위보다 멀리 있다면 Continue
                 if (Mathf.Abs(testDic.Value.transform.position.x - dic[myinstanceID].transform.position.x) > targetRange ||
                     Mathf.Abs(testDic.Value.transform.position.z - dic[myinstanceID].transform.position.z) > targetRange)
@@ -118,12 +127,16 @@ public class TargetFinder : MonoBehaviour
             }
         }
 
+        return new InstanceIDContainer(_targetInstanceID, _findTarget);
+
+        /*
         if (_findTarget)
         {
-            return dic[_targetInstanceID].transform;
+            return _targetInstanceID;
         }
         else
             return null;
+            */
     }
 
 

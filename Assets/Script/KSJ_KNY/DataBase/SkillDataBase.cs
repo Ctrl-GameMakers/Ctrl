@@ -35,7 +35,14 @@ public enum SkillUnitSortingBase
 
 public enum SkillCenterPoint
 {
-    Target, TargetPosition
+    OfStartTime = 1 << 30,
+    OfJudgmentTime = 1 << 31,
+
+    Target = 1 << 0,
+    TargetLocation = 1 << 1,
+
+    TargetLocationOfStartTime = TargetLocation | OfStartTime,
+    TargetLocationOfJudgmentTime = TargetLocation | OfJudgmentTime
 }
 
 public enum SkillAreaForm
@@ -151,7 +158,10 @@ public struct SkillData
         SetValue(ref _maximumJudgmentTargetCount, _skillData["MaximumJudgmentTargetCount"]);
         _judgmentTargetSortingBase = (SkillUnitSortingBase)System.Enum.Parse(typeof(SkillUnitSortingBase), _skillData["JudgmentTargetSortingBase"].ToString());
 
-                     
+        _damageType = (SkillDamageType)System.Enum.Parse(typeof(SkillDamageType), _skillData["DamageType"].ToString());
+        SetValue(ref _baseDamage, _skillData["BaseDamage"]);
+
+
         /*
         if(!_skillData["AreaForm"].ToString().Equals("-"))
         {
