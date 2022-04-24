@@ -5,14 +5,16 @@ using System;
 
 public struct Pos
 {
-    public Pos(int z, int x) { Z = z; X = x; }
-    public int Z;
-    public int X;
+    public int x;
+    public int z;
+    public Pos(int x, int z) { this.x = x; this.z = z; }
 }
 
 public class UnitController : MonoBehaviour
 {
-    Animator anim;
+    Transform tr;
+    GameObject go;
+
     public int PosZ { get; set; }
     public int PosX { get; set; }
 
@@ -23,7 +25,6 @@ public class UnitController : MonoBehaviour
     public float _moveSpeed = 2.0f;
 
     public bool _onField;
-    public bool _onAction;
 
     Define.State _state = Define.State.Idle;
 
@@ -31,10 +32,61 @@ public class UnitController : MonoBehaviour
     Vector3 _nextUnitMovePos;
 
     UnitAction _action;
-    
+    UnitStatus _status;
+
+    void Start()
+    {
+        UnitManager.Instance.AddUnitInformation(this);
+
+        tr = GetComponent<Transform>();
+        go = gameObject;
+        _action = GetComponent<UnitAction>();
+        _status = GetComponent<UnitStatus>();
+
+        TileManager.Instance.SetUnitTilePosition((int)tr.position.x, (int)tr.position.z, tr.GetInstanceID());
+    }
+
+    void Update()
+    {
+        if (UnitManager.Instance.isBattleMode)
+        {
+            if (!_action._onAction)
+            {
+                _state = Root();
+                switch (_state)
+                {
+                    case Define.State.Idle:
+                        {
+
+                        }
+                        break;
+                    case Define.State.Moving:
+                        {
+                            MoveAction();
+                        }
+                        break;
+                    case Define.State.Attack:
+                        {
+                            Debug.Log($"{this.go.name}On Attack!");
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+
+
     private Define.State Root()
     {
-        _targetTransform = UnitManager.Instance.TargetFinder(gameObject.GetInstanceID());
+        _targetTransform = UnitManager.Instance.TargetFinder(go.GetInstanceID(), SkillManager.Instance.GetSkillData(_status.normalSkillID));
+
+        if (_targetTransform == null)
+        {
+            return Idle();
+        }            
 
         if (Vector3.Distance(transform.position, _targetTransform.position) <= 1.45f)
         {
@@ -46,6 +98,11 @@ public class UnitController : MonoBehaviour
         }
 
     }
+    private Define.State Idle()
+    {
+        return Define.State.Idle;
+    }
+    
     private Define.State Move()
     {
         return Define.State.Moving;
@@ -55,96 +112,13 @@ public class UnitController : MonoBehaviour
     {
         return Define.State.Attack;
     }
-
-    void Start()
-    {
-        UnitManager.Instance.AddUnitInformation(gameObject.GetComponent<UnitController>());
-        Animator anim = GetComponent<Animator>();
-        _action = GetComponent<UnitAction>();
-    }
-
-    void Update()
-    {
-        if (UnitManager.Instance.isBattleMode)
-        {
-            if (!_action._onAction)
-            {
-                Debug.Log("_onAction true!");
-                _state = Root();
-                switch (_state)
-                {
-                    case Define.State.Idle:
-                        {
-
-                        }
-                        break;
-                    case Define.State.Moving:
-                        {
-                            Debug.Log("Start Moving!");
-                         
-                            MoveAction();
-                            
-                        }
-                        break;
-                    case Define.State.Attack:
-                        {
-                            Debug.Log($"{this.gameObject.name}On Attack!");
-                           
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-    }
-
+ 
     void MoveAction()
-    {
-        
-        PosZ = (int)this.gameObject.transform.position.z;
-        PosX = (int)this.gameObject.transform.position.x;
-        DestZ = (int)_targetTransform.position.z;
-        DestX = (int)_targetTransform.position.x;
+    {               
+        _nextUnitMovePos = UnitManager.Instance.NextPos(tr.GetInstanceID(), _targetTransform.GetInstanceID());
 
-        Board.Instance.BoardInitialize(6, DestZ, DestX, this);
-        
-        _nextUnitMovePos = UnitManager.Instance.NextPos(PosZ, PosX, DestZ, DestX);
+        TileManager.Instance.SetUnitTilePosition((int)_nextUnitMovePos.x, (int)_nextUnitMovePos.z, tr.GetInstanceID());
 
-        Board.Instance.Tile[(int)_nextUnitMovePos.z, (int)_nextUnitMovePos.x] = Define.TileType.InUnit;
-        Board.Instance.Tile[PosZ, PosX] = Define.TileType.Empty;
-
-        _action.Move(_nextUnitMovePos);
-       
+        _action.Move(_nextUnitMovePos);       
     }
-    //void StartAstar()
-    //{
-
-    //    PosZ = (int)this.gameObject.transform.position.z;
-    //    PosX = (int)this.gameObject.transform.position.x;
-    //    DestZ = (int)_targetTransform.position.z;
-    //    DestX = (int)_targetTransform.position.x;
-
-    //    //Board.Instance.BoardInitialize(6, DestZ, DestX, this);
-    //    UnitManager.Instance.UnitInitialize( PosZ, PosX, DestZ, DestX);
-    //}
-    //internal List<UnitManager.Pos> SetNextPath(List<UnitManager.Pos> points)
-    //{
-    //    myPoints = points;
-
-    //    _nextMovePos = new Vector3(myPoints[1].X, 0, myPoints[1].Z);
-    //    Debug.Log($"{this.gameObject.name}의 다음 벡터 : {_nextMovePos}");
-
-    //    Board.Instance.Tile[myPoints[1].Z, myPoints[1].X] = Define.TileType.InUnit;
-    //    Board.Instance.Tile[myPoints[0].Z, myPoints[0].X] = Define.TileType.Empty;
-
-    //    for (int i = 0; i < myPoints.Count; i++)
-    //        Debug.Log($"{this.gameObject.name}의 {myPoints[i].Z} {myPoints[i].X} ");
-
-    //    _nextUnitMovePos = new Vector3(myPoints[1].X, 0, myPoints[1].Z);
-
-    //    transform.position = _nextUnitMovePos;
-
-    //    return null;
-    //}
 }

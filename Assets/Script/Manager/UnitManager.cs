@@ -11,8 +11,9 @@ public class UnitManager : MonoBehaviour
         public GameObject unit;
         public Transform transform;
         public UnitController unitController;
+        public UnitStatus unitStatus;
 
-        public UnitInformation(GameObject go, Transform tr, UnitController controller) { unit = go; transform = tr; unitController = controller; }
+        public UnitInformation(GameObject go, Transform tr, UnitController controller, UnitStatus status) { unit = go; transform = tr; unitController = controller; unitStatus = status; }
     }
 
     static UnitManager s_instance;
@@ -38,6 +39,14 @@ public class UnitManager : MonoBehaviour
 
     private TargetFinder targetFinder;
 
+    private Pos myTilePos;
+    private Pos targetTilePos;
+
+    void Start()
+    {
+        targetFinder = GetComponent<TargetFinder>();
+    }
+
     void Update()
     {
         if (!isBattleMode)
@@ -45,10 +54,7 @@ public class UnitManager : MonoBehaviour
             BattleStart();
         }
     }
-    void Start()
-    {
-        targetFinder = GetComponent<TargetFinder>();
-    }
+
 
     public void BattleStart()
     {
@@ -64,19 +70,39 @@ public class UnitManager : MonoBehaviour
 
     public void AddUnitInformation(UnitController controller)
     {
-        _controllerList.Add(new UnitInformation(controller.gameObject, controller.transform, controller));
+        _controllerList.Add(new UnitInformation(controller.gameObject, controller.transform, controller, controller.GetComponent<UnitStatus>()));
     }
 
-    public Transform TargetFinder(int instanceID)
+    public Transform TargetFinder(int instanceID, SkillData skillData)
     {
-        return targetFinder.TargetUnitFinder(instanceID, dic);
+        return targetFinder.TargetUnitFinder(instanceID, dic, skillData.targetRange, skillData.targetGroup, skillData.targetSortingBase);
     }
 
     public Vector3 NextPos(int posZ, int posX, int destZ, int destX)
     {
         List<AstarManager.Pos> myPoints = AstarManager.Instance.FindAstar(posZ, posX, destZ, destX);
 
-        return new Vector3(myPoints[1].X, 0, myPoints[1].Z);
+        return new Vector3(myPoints[1].x, 0, myPoints[1].z);
     }
 
+
+    public Vector3 NextPos(int myInstanceID, int targetInstanceID)
+    {
+        myTilePos = TileManager.Instance.GetUnitTilePosition(myInstanceID);
+        targetTilePos = TileManager.Instance.GetUnitTilePosition(targetInstanceID);
+
+        Debug.Log($"{myInstanceID} 위치 = {myTilePos.x}, {myTilePos.z} // {targetInstanceID} 위치 = {targetTilePos.x}, {targetTilePos.z}" );
+
+        List<AstarManager.Pos> myPoints = AstarManager.Instance.FindAstar(myTilePos.x, myTilePos.z, targetTilePos.x, targetTilePos.z);
+
+        if(myPoints.Count <= 2)
+        {
+            return new Vector3(myPoints[0].x, 0, myPoints[0].z);
+        }
+        else
+        {
+            return new Vector3(myPoints[1].x, 0, myPoints[1].z);
+        }
+
+    }
 }

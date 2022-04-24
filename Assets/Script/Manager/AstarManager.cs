@@ -13,7 +13,6 @@ public class AstarManager : MonoBehaviour
             if (s_instance == null)
             {
                 s_instance = FindObjectOfType<AstarManager>();
-                Debug.Log("find UnitManager");
             }
             return s_instance;
         }
@@ -35,92 +34,118 @@ public class AstarManager : MonoBehaviour
     }
     public struct Pos
     {
-        public Pos(int z, int x) { Z = z; X = x; }
-        public int Z;
-        public int X;
+        public int x;
+        public int z;
+        public Pos(int x, int z) { this.x = x; this.z = z; }
     }
 
-    public List<Pos> FindAstar(int posZ, int posX, int destZ, int destX)
+
+    // 상좌하우 예약하기 위한 배열
+    // U L D R UL DL DR UR
+    int[] deltaZ = new int[] { -1, 0, 1, 0, -1, 1, 1, -1 };
+    int[] deltaX = new int[] { 0, -1, 0, 1, -1, -1, 1, 1 };
+    int[] cost = new int[] { 10, 10, 10, 10, 14, 14, 14, 14 }; // U L D R UL DL DR UR로 가는 비용
+
+    bool[,] closed = new bool[15, 15];
+    int[,] open = new int[15, 15];
+    Pos[,] parent = new Pos[15, 15];
+
+    PriorityQueue<PQNode> pq = new PriorityQueue<PQNode>();
+
+    int nextX;
+    int nextZ;
+
+    int g;
+    int h;
+
+    int destX;
+    int destZ;
+
+    Pos pos;
+
+    List<Pos> _points = new List<Pos>();
+
+
+    private void Awake()
     {
-        // 상좌하우 예약하기 위한 배열
-        // U L D R UL DL DR UR
-        int[] deltaZ = new int[] { -1, 0, 1, 0, -1, 1, 1, -1 };
-        int[] deltaX = new int[] { 0, -1, 0, 1, -1, -1, 1, 1 };
-        int[] cost = new int[] { 10, 10, 10, 10, 14, 14, 14, 14 }; // U L D R UL DL DR UR로 가는 비용
+        Instance.Init();
+    }
+    private void Init(){}
 
-        // (x, z) 이미 방문했는지 여부
-        bool[,] closed = new bool[Board.Instance.Size, Board.Instance.Size];
 
-        // (x, z) 가는 길을 한 번이라도 발견했는지 여부
-        // 발견 못했으면 MaxValue
-        // 발견했으면 F = G + H
-        int[,] open = new int[Board.Instance.Size, Board.Instance.Size];
+    public List<Pos> FindAstar(int posX, int posZ, int destX, int destZ)
+    {
+        for (int x = 0; x < TileManager.Instance.boardSize; x++)
+        {
+            for (int z = 0; z < TileManager.Instance.boardSize; z++)
+            {
+                closed[x, z] = false;
+                open[x, z] = int.MaxValue;
+                parent[x, z].x = x;
+                parent[x, z].z = z;
+            }
+        }
 
-        for (int z = 0; z < Board.Instance.Size; z++)
-            for (int x = 0; x < Board.Instance.Size; x++)
-                open[z, x] = Int32.MaxValue;
-
-        Pos[,] parent = new Pos[Board.Instance.Size, Board.Instance.Size];
-
-        // 오픈리스트에 있는 정보들 중에서, 가장 좋은 후보를 빠르게 뽑아오기 위한 도구
-        PriorityQueue<PQNode> pq = new PriorityQueue<PQNode>();
-
+        pq.Clear();
+        
         // 시작점 발견 (예약 진행)
-        open[posZ, posX] = 10 * (Math.Abs(destZ - posZ) + Math.Abs(destX - posX));
+        open[posX, posZ] = 10 * (Math.Abs(destZ - posZ) + Math.Abs(destX - posX));
         pq.Push(new PQNode() { F = 10 * (Math.Abs(destZ - posZ) + Math.Abs(destX - posX)), G = 0, Z = posZ, X = posX });
-        parent[posZ, posX] = new Pos(posZ, posX);
+        parent[posX, posZ] = new Pos(posX, posZ);
 
         while (pq.Count > 0)
         {
             // 제일 좋은 후보를 찾는다.
             PQNode node = pq.Pop();
 
-            // 방문한 곳이라면 스킵
-            if (closed[node.Z, node.X])
-                continue;
-
             // 방문한다.
-            closed[node.Z, node.X] = true;
+            closed[node.X, node.Z] = true;
 
             // 목적지 도착했으면 바로종료
             if (node.Z == destZ && node.X == destX)
                 break;
 
-            // TileType이 유닛일 경우 AND 나의 좌표와 같지 않을 경우 => 즉, 내 타일은 InUnit인데 나의 InUnit이 아닐 경우
-            if (Board.Instance.Tile[node.Z, node.X] == Define.TileType.InUnit && node.Z != posZ && node.X != posX)
-                continue;
-
             // 상하좌우 등 이동할 수 있는 좌표인지 확인해서 예약(open)한다.
             for (int i = 0; i < deltaZ.Length; i++)
             {
-                int nextZ = node.Z + deltaZ[i];
-                int nextX = node.X + deltaX[i];
+                nextX = node.X + deltaX[i];
+                nextZ = node.Z + deltaZ[i];
 
                 // 유효범위를 벗어났으면 스킵
-                if (nextX < 0 || nextX >= Board.Instance.Size || nextZ < 0 || nextZ >= Board.Instance.Size)
-                    continue;
-
-                // 벽으로 막혀서 갈 수 없으면 스킵
-                if (Board.Instance.Tile[nextZ, nextX] == Define.TileType.Wall)
+                if (nextX < 0 || nextX >= TileManager.Instance.boardSize || nextZ < 0 || nextZ >= TileManager.Instance.boardSize)
                     continue;
 
                 // 이미 방문한 곳이라면 스킵
-                if (closed[nextZ, nextX])
+                if (closed[nextX, nextZ])
                     continue;
 
+                // 벽으로 막혀서 갈 수 없으면 Close 선언 후 스킵
+                if (TileManager.Instance.Tiles[nextX, nextZ].Equals(Define.TileType.Wall))
+                {
+                    closed[nextX, nextZ] = true;
+                    continue;
+                }
+
+                // 자리에 유닛이 있고, 그 유닛에 타겟이 위치하고 있지 않다면 Close 선언 후 스킵
+                if (TileManager.Instance.Tiles[nextX, nextZ].Equals(Define.TileType.InUnit) && (nextZ != destZ || nextX != destX))
+                {
+                    closed[nextX, nextZ] = true;
+                    continue;
+                }
+
+
                 // 비용계산
-                int g = node.G + cost[i];
-                int h = 10 * (Math.Abs(destZ - nextZ) + Math.Abs(destX - nextX));
+                g = node.G + cost[i];
+                h = 10 * (Math.Abs(destZ - nextZ) + Math.Abs(destX - nextX));
 
                 // 그런데 다른 경로에서 더 빠른길 이미 찾았으면 스킵한다.
-                if (open[nextZ, nextX] < g + h)
+                if (open[nextX, nextZ] < g + h)
                     continue;
 
                 // 예약 진행
-                open[nextZ, nextX] = g + h;
+                open[nextX, nextZ] = g + h;
                 pq.Push(new PQNode() { F = g + h, G = g, Z = nextZ, X = nextX });
-                parent[nextZ, nextX] = new Pos(node.Z, node.X);
-
+                parent[nextX, nextZ] = new Pos(node.X, node.Z);
             }
         }
 
@@ -128,21 +153,20 @@ public class AstarManager : MonoBehaviour
     }
     List<Pos> CalcPathFromParent(Pos[,] parent, int destZ, int destX)
     {
-        List<Pos> _points = new List<Pos>();
-        _points.Clear();
+        _points.Clear();        
 
-        int z = destZ;
-        int x = destX;
+        this.destZ = destZ;
+        this.destX = destX;
 
-        while (parent[z, x].Z != z || parent[z, x].X != x)
+        while (parent[this.destX, this.destZ].z != this.destZ || parent[this.destX, this.destZ].x != this.destX)
         {
-            _points.Add(new Pos(z, x));
-            Pos pos = parent[z, x];
+            _points.Add(new Pos(this.destX, this.destZ));
+            pos = parent[this.destX, this.destZ];
 
-            z = pos.Z;
-            x = pos.X;
+            this.destZ = pos.z;
+            this.destX = pos.x;
         }
-        _points.Add(new Pos(z, x));
+        _points.Add(new Pos(this.destX, this.destZ));
         _points.Reverse();
 
         //return _unit.SetNextPath(_points);
