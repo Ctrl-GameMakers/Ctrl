@@ -10,12 +10,17 @@ public static class UIConst
 
     public static System.Type[] main_ui_classes = new System.Type[]
     {
+        //PlayScene UIs
         typeof(UIStage),
+
+        //MapTool UIs
+        typeof(UIMapTool),
     };
 
     public static System.Type[] popup_1_ui_classes = new System.Type[]
     {
-        
+        //MapTool UIs
+        typeof(UIMapTool_MaterialList),
     };
 
     public static System.Type[] popup_2_ui_classes = new System.Type[]
