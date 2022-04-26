@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Define
 {
-    public enum State
+    public enum UnitState
     {
         Die,
         Moving,

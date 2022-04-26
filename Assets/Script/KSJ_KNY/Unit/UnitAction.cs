@@ -7,7 +7,7 @@ public class UnitAction : MonoBehaviour
     Transform tr;
     GameObject go;
 
-    float _moveSpeed = 1.0f;
+    float _moveSpeed = 2.0f;
     public bool _onAction;
 
     Vector3 _goalPos;
@@ -19,10 +19,6 @@ public class UnitAction : MonoBehaviour
     {
         tr = GetComponent<Transform>();
         go = gameObject;
-    }
-    void Update()
-    {
-        
     }
 
     public void Move(Vector3 goalPos)
@@ -58,6 +54,7 @@ public class UnitAction : MonoBehaviour
         _onAction = true;
 
         SkillManager.Instance.UseSkill(skillID, go.GetInstanceID(), _targetInstanceID);
+
         yield return new WaitForSeconds(SkillManager.Instance.GetSkillData(skillID).judgmentTime + SkillManager.Instance.GetSkillData(skillID).afterDelay);
 
         _onAction = false;

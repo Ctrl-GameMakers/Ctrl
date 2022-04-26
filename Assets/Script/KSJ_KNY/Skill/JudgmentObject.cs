@@ -7,6 +7,7 @@ public class JudgmentObject : MonoBehaviour
     bool isTrial = true;
 
     Transform tr;
+    GameObject go;
     JudgmentObjectPoolMgr judgmentObjectPoolMgr;
 
     private int skillID;
@@ -16,9 +17,12 @@ public class JudgmentObject : MonoBehaviour
     private List<int> judgmentTargetsInstanceID = new List<int>();
     private IEnumerator _judgmentDelay;
 
+    private float damageAmount;
+
     private void Awake()
     {
         tr = GetComponent<Transform>();
+        go = gameObject;
         judgmentObjectPoolMgr = GetComponentInParent<JudgmentObjectPoolMgr>();
     }
 
@@ -36,17 +40,16 @@ public class JudgmentObject : MonoBehaviour
     {
         if(isTrial)
         {
-            isTrial = false;
-            if (gameObject.activeSelf)
+            if (go.activeSelf)
             {
-                gameObject.SetActive(false);
+                go.SetActive(false);
             }
         }
     }
 
     public void ActiveSkill(int skillID, int casterInstanceID, int targetInstanceID)
     {
-        gameObject.SetActive(true);
+        go.SetActive(true);
 
         this.skillID = skillID;
         this.casterInstanceID = casterInstanceID;
@@ -58,15 +61,21 @@ public class JudgmentObject : MonoBehaviour
         }
         else
         {
+            UnitManager.Instance.GetUnitController(casterInstanceID).SetUsingJudgmentObject(this);
             _judgmentDelay = JudgmentDelay();
             StartCoroutine(_judgmentDelay);
         }
     }
 
+    public void DisableSkill()
+    {
+        if(go.activeSelf)
+            go.SetActive(false);
+    }
+
     //판정 딜레이만큼 대기 후 판정 진행
     IEnumerator JudgmentDelay()
     {
-        Debug.Log("오긴 하니?");
         if(SkillManager.Instance.GetSkillData(skillID).skillCenterPoint.HasFlag(SkillCenterPoint.OfStartTime))
         {
             if (SkillManager.Instance.GetSkillData(skillID).skillCenterPoint.HasFlag(SkillCenterPoint.TargetLocation))
@@ -92,6 +101,9 @@ public class JudgmentObject : MonoBehaviour
         else if (SkillManager.Instance.GetSkillData(skillID).skillCenterPoint.HasFlag(SkillCenterPoint.Target))
         {
             tr.position = UnitManager.Instance.GetUnitPosition(targetInstanceID);
+
+            damageAmount = JudgmentCalculater.Instance.AttackDamageCalculater(skillID, casterInstanceID);
+
             yield return new WaitForSeconds(SkillManager.Instance.GetSkillData(skillID).judgmentTime);
 
             CalculationJudgment();
@@ -119,12 +131,10 @@ public class JudgmentObject : MonoBehaviour
         }
     }
 
-    //판정 후 효과처리 요청
-    //타겟에게 처리되는 효과의 경우 CalculationJudgmentEffect에 처리 요청
-    //기타 부가효과 발생 시, 해당 함수에서 처리
+
     private void CalculationJudgment()
     {
-        JudgmentCalculater.Instance.CalculationJudgment(skillID, casterInstanceID, targetInstanceID);
+        JudgmentCalculater.Instance.CalculationJudgment(skillID, casterInstanceID, targetInstanceID, damageAmount);
 
         gameObject.SetActive(false);
     }
@@ -132,24 +142,32 @@ public class JudgmentObject : MonoBehaviour
 
     private void CalculationJudgments(int _id, List<Collider2D> _targetList)
     {
-        JudgmentCalculater.Instance.CalculationJudgment(skillID, casterInstanceID, targetInstanceID);
+        JudgmentCalculater.Instance.CalculationJudgment(skillID, casterInstanceID, targetInstanceID, damageAmount);
 
         gameObject.SetActive(false);
     }
     
 
-
-    //비활성화 시 저장된 정보 삭제
     private void OnDisable()
     {
-        skillID = 0;
-        casterInstanceID = 0;
+        if(isTrial)
+        {
+            isTrial = false;
+            return;
+        }
 
-        if(_judgmentDelay != null)
+        if (UnitManager.Instance.GetUnitController(casterInstanceID).nowUsingJudgmentObject.Equals(this))
+            UnitManager.Instance.GetUnitController(casterInstanceID).ResetJudgmentObject();
+
+        if (_judgmentDelay != null)
         {
             StopCoroutine(_judgmentDelay);
             _judgmentDelay = null;
         }
+
+        skillID = 0;
+        casterInstanceID = 0;
+        damageAmount = 0.0f;
 
         judgmentObjectPoolMgr.EnqueueObject(this);
     }

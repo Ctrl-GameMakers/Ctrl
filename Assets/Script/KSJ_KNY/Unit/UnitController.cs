@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public struct Pos
+public struct IntVector2
 {
     public int x;
     public int z;
-    public Pos(int x, int z) { this.x = x; this.z = z; }
+    public IntVector2(int x, int z) { this.x = x; this.z = z; }
 }
 
 public class UnitController : MonoBehaviour
@@ -16,68 +16,71 @@ public class UnitController : MonoBehaviour
     GameObject go;
     
     public Vector3 _nextMovePos;
-    public float _moveSpeed = 2.0f;
 
     public bool _onField;
 
-    Define.State _state = Define.State.Idle;
+    Define.UnitState _state = Define.UnitState.Idle;
+    public Define.UnitState state { get => _state; }
 
     InstanceIDContainer _targetContainer;
-    Transform _targetTransform;
     Vector3 _nextUnitMovePos;
+
+    JudgmentObject _nowUsingJudgmentObject;
+    public JudgmentObject nowUsingJudgmentObject { get => _nowUsingJudgmentObject; }
 
     UnitAction _action;
     UnitStatus _status;
 
     void Start()
     {
-        UnitManager.Instance.AddUnitInformation(this);
-
         tr = GetComponent<Transform>();
         go = gameObject;
         _action = GetComponent<UnitAction>();
         _status = GetComponent<UnitStatus>();
 
-        TileManager.Instance.SetUnitTilePosition((int)tr.position.x, (int)tr.position.z, go.GetInstanceID());
+        UnitManager.Instance.AddUnitInformation(this);
     }
 
     void Update()
     {
         if (UnitManager.Instance.isBattleMode)
         {
-            if (!_action._onAction)
+            if (!_state.Equals(Define.UnitState.Die))
             {
-                _state = Root();
-                switch (_state)
+                if (!_action._onAction)
                 {
-                    case Define.State.Idle:
-                        {
+                    _state = Root();
+                    switch (_state)
+                    {
+                        case Define.UnitState.Idle:
+                            {
 
-                        }
-                        break;
-                    case Define.State.Moving:
-                        {
-                            MoveAction();
-                        }
-                        break;
-                    case Define.State.Attack:
-                        {
-                            AttackAction();
-                        }
-                        break;
-                    default:
-                        break;
+                            }
+                            break;
+                        case Define.UnitState.Moving:
+                            {
+                                MoveAction();
+                            }
+                            break;
+                        case Define.UnitState.Attack:
+                            {
+                                AttackAction();
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
     }
 
 
+    #region Unit Action
     void MoveAction()
     {
         _nextUnitMovePos = UnitManager.Instance.NextPos(go.GetInstanceID(), _targetContainer.targetInstanceID);
-
-        TileManager.Instance.SetUnitTilePosition((int)_nextUnitMovePos.x, (int)_nextUnitMovePos.z, go.GetInstanceID());
+        TileManager.Instance.SetUnitTilePosition((int)_nextUnitMovePos.x, (int)_nextUnitMovePos.z, go.GetInstanceID(), Define.TileType.InUnit);
 
         _action.Move(_nextUnitMovePos);
     }
@@ -86,13 +89,17 @@ public class UnitController : MonoBehaviour
     {
         _action.Attack(_targetContainer.targetInstanceID, _status.normalSkillID);
     }
+    #endregion
 
-
-
-    private Define.State Root()
+    #region Unit AI
+    private Define.UnitState Root()
     {
         //Å¸°Ù °Ë»ö
-        _targetContainer = UnitManager.Instance.TargetFinder(go.GetInstanceID(), SkillManager.Instance.GetSkillData(_status.normalSkillID));
+        if(_status.nowMP >= _status.maxMP)
+            _targetContainer = UnitManager.Instance.TargetFinder(go.GetInstanceID(), SkillManager.Instance.GetSkillData(_status.specialSkillID));
+        else
+            _targetContainer = UnitManager.Instance.TargetFinder(go.GetInstanceID(), SkillManager.Instance.GetSkillData(_status.normalSkillID));
+
 
         if (!_targetContainer.isExist)
         {
@@ -110,19 +117,32 @@ public class UnitController : MonoBehaviour
         }
 
     }
-    private Define.State Idle()
+    private Define.UnitState Idle()
     {
-        return Define.State.Idle;
+        return Define.UnitState.Idle;
     }
     
-    private Define.State Move()
+    private Define.UnitState Move()
     {
-        return Define.State.Moving;
+        return Define.UnitState.Moving;
     }
 
-    private Define.State Attack()
+    private Define.UnitState Attack()
     {
-        return Define.State.Attack;
+        return Define.UnitState.Attack;
     }
+    #endregion
 
+    public void SetUsingJudgmentObject(JudgmentObject judgmentObject) => _nowUsingJudgmentObject = judgmentObject;
+    public void ResetJudgmentObject() => _nowUsingJudgmentObject = null;
+    public void Death()
+    {
+        if(_nowUsingJudgmentObject != null)
+        {
+            _nowUsingJudgmentObject.DisableSkill();
+            ResetJudgmentObject();
+        }
+        _state = Define.UnitState.Die;
+        UnitManager.Instance.SetUnitDeath(go.GetInstanceID());
+    }
 }

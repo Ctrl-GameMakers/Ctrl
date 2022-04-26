@@ -64,6 +64,17 @@ public enum SkillDamageType
     Physic, Magic
 }
 
+public enum SkillApplyStatus
+{
+    AttackPower, SpellPower
+}
+
+
+public enum SkillEffectType
+{
+    DamageOverTime
+}
+
 
 public struct SkillData
 {
@@ -93,7 +104,9 @@ public struct SkillData
     private SkillUnitSortingBase _judgmentTargetSortingBase;
 
     private SkillDamageType _damageType;
-    private float _baseDamage;
+    private float _baseAmount;
+    private SkillApplyStatus _applyStatus;
+    public float _coefficientAmount;
 
 
 
@@ -125,7 +138,9 @@ public struct SkillData
     public SkillUnitSortingBase judgmentTargetSortingBase { get => _judgmentTargetSortingBase; }
 
     public SkillDamageType damageType { get => _damageType; }
-    public float baseDamage { get => _baseDamage; }
+    public float baseAmount { get => _baseAmount; }
+    public SkillApplyStatus applyStatus { get => _applyStatus; }
+    public float coefficientAmount { get => _coefficientAmount; }
 
     #endregion
 
@@ -159,42 +174,28 @@ public struct SkillData
         _judgmentTargetSortingBase = (SkillUnitSortingBase)System.Enum.Parse(typeof(SkillUnitSortingBase), _skillData["JudgmentTargetSortingBase"].ToString());
 
         _damageType = (SkillDamageType)System.Enum.Parse(typeof(SkillDamageType), _skillData["DamageType"].ToString());
-        SetValue(ref _baseDamage, _skillData["BaseDamage"]);
+        SetValue(ref _baseAmount, _skillData["BaseAmount"]);
+        _applyStatus = (SkillApplyStatus)System.Enum.Parse(typeof(SkillApplyStatus), _skillData["ApplyStatus"].ToString());
+        SetValue(ref _coefficientAmount, _skillData["CoefficientAmount"]);
 
-
-        /*
-        if(!_skillData["AreaForm"].ToString().Equals("-"))
-        {
-            _areaForm = (SkillAreaForm)System.Enum.Parse(typeof(SkillAreaForm), _skillData["AreaForm"].ToString());
-        }
-        ]
-
-        if (!_skillData["JudgmentLayer"].ToString().Equals("-"))
-        {
-            _judgmentLayer = (LayerEnum)System.Enum.Parse(typeof(LayerEnum), _skillData["JudgmentLayer"].ToString());
-        }
-        else
-        {
-            _judgmentLayer = LayerEnum.Null;
-        }
-        ]*/
-
-        //_prefab = Resources.Load(_skillData["Prefab"].ToString()) as GameObject;
         return this;
     }
 
-    private void SetValue(ref int _variableName, object _dataName)
+    private void SetValue(ref int variableName, object dataName)
     {
-        if (!_dataName.ToString().Equals("-"))
-        {
-            _variableName = (int)_dataName;
-        }
+        if (!dataName.ToString().Equals("-"))
+            variableName = (int)dataName;
     }
-    private void SetValue(ref float _variableName, object _dataName)
+    private void SetValue(ref float variableName, object dataName)
     {
-        if (!_dataName.ToString().Equals("-"))
+        if (!dataName.ToString().Equals("-"))
+            variableName = (float)dataName;
+    }
+    private void SetValue(ref GameObject variableName, object dataName)
+    {
+        if (!dataName.ToString().Equals("-"))
         {
-            _variableName = (float)_dataName;
+            variableName = Resources.Load("DataBase/" + dataName.ToString()) as GameObject;
         }
     }
 
@@ -208,14 +209,11 @@ public class SkillDataBase : MonoBehaviour
     {
         List<Dictionary<string, object>> SkillDataDialog = CSVReader.Read("DataBase/SkillDataBase");
 
-        Debug.Log($"{SkillDataDialog[0]["ID"]}");
-
         for (int i = 0; i < SkillDataDialog.Count; i++)
         {
             var tempSkillData = new SkillData();
             tempSkillData = new SkillData().SetSkillData(SkillDataDialog[i]);
             skillDB.Add((int)SkillDataDialog[i]["ID"], tempSkillData);
-            //skillDB.Add((int)SkillDataDialog[i]["ID"], new SkillData().SetSkillData(SkillDataDialog[i]));
         }
 
         //필요없는건 정리 정리
@@ -229,7 +227,5 @@ public class SkillDataBase : MonoBehaviour
     public SkillData GetSkillData(int _id)
     {
         return skillDB[_id];
-    }
-
-    
+    }    
 }

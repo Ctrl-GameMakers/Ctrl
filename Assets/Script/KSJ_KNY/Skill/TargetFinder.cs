@@ -37,7 +37,7 @@ public class TargetFinder : MonoBehaviour
     TargetInfo tempTargetFind;
     float value;
 
-    public InstanceIDContainer TargetUnitFinder(int myinstanceID, Dictionary<int, UnitManager.UnitInformation> dic, int targetRange, SkillUnitGroup targetGroup, SkillUnitSortingBase sortingBase)
+    public InstanceIDContainer TargetUnitFinder(int myinstanceID, Dictionary<int, UnitManager.UnitInformation> unitDic, int targetRange, SkillUnitGroup targetGroup, SkillUnitSortingBase sortingBase)
     {
         //지역변수 초기화
         tempTargetFind.Clear();
@@ -50,13 +50,13 @@ public class TargetFinder : MonoBehaviour
             value = 0;
 
 
-        foreach (KeyValuePair<int, UnitManager.UnitInformation> testDic in dic)
+        foreach (KeyValuePair<int, UnitManager.UnitInformation> unitsPair in unitDic)
         {
-            if (testDic.Key != myinstanceID)
+            if (unitsPair.Key != myinstanceID && !UnitManager.Instance.GetBattleUnitIsDeath(unitsPair.Key))
             {
                 //타겟 탐색범위보다 멀리 있다면 Continue
-                if (Mathf.Abs(testDic.Value.transform.position.x - dic[myinstanceID].transform.position.x) > targetRange ||
-                    Mathf.Abs(testDic.Value.transform.position.z - dic[myinstanceID].transform.position.z) > targetRange)
+                if (Mathf.Abs(unitsPair.Value.transform.position.x - unitDic[myinstanceID].transform.position.x) > targetRange ||
+                    Mathf.Abs(unitsPair.Value.transform.position.z - unitDic[myinstanceID].transform.position.z) > targetRange)
                     continue;
 
 
@@ -66,11 +66,11 @@ public class TargetFinder : MonoBehaviour
                 switch (targetGroup)
                 {
                     case SkillUnitGroup.Ally:
-                        _chkGroup = testDic.Value.unit.tag.Equals(dic[myinstanceID].unit.tag);
+                        _chkGroup = unitsPair.Value.unit.tag.Equals(unitDic[myinstanceID].unit.tag);
                         break;
 
                     case SkillUnitGroup.Enemy:
-                        _chkGroup = !testDic.Value.unit.tag.Equals(dic[myinstanceID].unit.tag);
+                        _chkGroup = !unitsPair.Value.unit.tag.Equals(unitDic[myinstanceID].unit.tag);
                         break;
 
                     default:
@@ -88,35 +88,35 @@ public class TargetFinder : MonoBehaviour
                 switch(sortingBase)
                 {
                     case SkillUnitSortingBase.DistanceAscending:
-                        if (value > Mathf.Abs(testDic.Value.transform.position.x - dic[myinstanceID].transform.position.x) + Mathf.Abs(testDic.Value.transform.position.z - dic[myinstanceID].transform.position.z))
+                        if (value > Mathf.Abs(unitsPair.Value.transform.position.x - unitDic[myinstanceID].transform.position.x) + Mathf.Abs(unitsPair.Value.transform.position.z - unitDic[myinstanceID].transform.position.z))
                         {
-                            value = Mathf.Abs(testDic.Value.transform.position.x - dic[myinstanceID].transform.position.x) + Mathf.Abs(testDic.Value.transform.position.z - dic[myinstanceID].transform.position.z);
-                            _targetInstanceID = testDic.Key;
+                            value = Mathf.Abs(unitsPair.Value.transform.position.x - unitDic[myinstanceID].transform.position.x) + Mathf.Abs(unitsPair.Value.transform.position.z - unitDic[myinstanceID].transform.position.z);
+                            _targetInstanceID = unitsPair.Key;
                         }
                         break;
 
                     case SkillUnitSortingBase.DistanceDecending:
-                        if (value < Mathf.Abs(testDic.Value.transform.position.x - dic[myinstanceID].transform.position.x) + Mathf.Abs(testDic.Value.transform.position.z - dic[myinstanceID].transform.position.z))
+                        if (value < Mathf.Abs(unitsPair.Value.transform.position.x - unitDic[myinstanceID].transform.position.x) + Mathf.Abs(unitsPair.Value.transform.position.z - unitDic[myinstanceID].transform.position.z))
                         {
-                            value = Mathf.Abs(testDic.Value.transform.position.x - dic[myinstanceID].transform.position.x) + Mathf.Abs(testDic.Value.transform.position.z - dic[myinstanceID].transform.position.z);
-                            _targetInstanceID = testDic.Key;
+                            value = Mathf.Abs(unitsPair.Value.transform.position.x - unitDic[myinstanceID].transform.position.x) + Mathf.Abs(unitsPair.Value.transform.position.z - unitDic[myinstanceID].transform.position.z);
+                            _targetInstanceID = unitsPair.Key;
 
                         }
                         break;
 
                     case SkillUnitSortingBase.HealthPointAscending:
-                        if(value > testDic.Value.unitStatus.nowHP)
+                        if(value > unitsPair.Value.unitStatus.nowHP)
                         {
-                            value = testDic.Value.unitStatus.nowHP;
-                            _targetInstanceID = testDic.Key;
+                            value = unitsPair.Value.unitStatus.nowHP;
+                            _targetInstanceID = unitsPair.Key;
                         }
                         break;
 
                     case SkillUnitSortingBase.HealthPointDecending:
-                        if (value < testDic.Value.unitStatus.nowHP)
+                        if (value < unitsPair.Value.unitStatus.nowHP)
                         {
-                            value = testDic.Value.unitStatus.nowHP;
-                            _targetInstanceID = testDic.Key;
+                            value = unitsPair.Value.unitStatus.nowHP;
+                            _targetInstanceID = unitsPair.Key;
                         }
                         break;
 
@@ -128,15 +128,6 @@ public class TargetFinder : MonoBehaviour
         }
 
         return new InstanceIDContainer(_targetInstanceID, _findTarget);
-
-        /*
-        if (_findTarget)
-        {
-            return _targetInstanceID;
-        }
-        else
-            return null;
-            */
     }
 
 

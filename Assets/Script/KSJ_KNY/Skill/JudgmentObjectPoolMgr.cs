@@ -10,7 +10,6 @@ public class JudgmentObjectPoolMgr : MonoBehaviour
     private List<JudgmentObject> judgmentObjectList = new List<JudgmentObject>();
     Queue<JudgmentObject> judgmentObjectQueue = new Queue<JudgmentObject>();
 
-    //설정해둔 startCreateCount만큼 JudgmentObject 사전생성
     void Awake()
     {
         judgmentObjectList.Clear();
@@ -23,16 +22,7 @@ public class JudgmentObjectPoolMgr : MonoBehaviour
         }
     }
 
-
-    //시전요청을 받게되면 만들어 둔 JudgmentObject Pool에서 사용중이 아닌(비활성) 오브젝트에 관련정보 제공하고 활성화
-    //>> 추후 제작해 둔 Pool이 모두 사용중인 경우 추가 Pool을 생성하는 코드 필요
-    public void ActiveSkill(int _id, int _casterInstanceID, Vector3 _position, Quaternion _rotation)
-    {
-        ChkjudgmentObjectQueue();
-
-        //judgmentObjectQueue.Dequeue().ActiveSkill(_id, _casterInstanceID, _position, _rotation);
-    }
-
+    
     public void ActiveSkill(int skillID, int casterInstanceID, int targetInstanceID)
     {
         ChkjudgmentObjectQueue();

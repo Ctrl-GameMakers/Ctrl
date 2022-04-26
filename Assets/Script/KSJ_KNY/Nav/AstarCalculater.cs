@@ -32,13 +32,6 @@ public class AstarCalculater : MonoBehaviour
             return F < other.F ? 1 : -1;
         }
     }
-    public struct Pos
-    {
-        public int x;
-        public int z;
-        public Pos(int x, int z) { this.x = x; this.z = z; }
-    }
-
 
     // 상좌하우 예약하기 위한 배열
     // U L D R UL DL DR UR
@@ -48,7 +41,7 @@ public class AstarCalculater : MonoBehaviour
 
     bool[,] closed = new bool[15, 15];
     int[,] open = new int[15, 15];
-    Pos[,] parent = new Pos[15, 15];
+    IntVector2[,] parent = new IntVector2[15, 15];
 
     PriorityQueue<PQNode> pq = new PriorityQueue<PQNode>();
 
@@ -61,9 +54,9 @@ public class AstarCalculater : MonoBehaviour
     int destX;
     int destZ;
 
-    Pos pos;
+    IntVector2 pos;
 
-    List<Pos> _points = new List<Pos>();
+    List<IntVector2> _points = new List<IntVector2>();
 
 
     private void Awake()
@@ -73,7 +66,7 @@ public class AstarCalculater : MonoBehaviour
     private void Init(){}
 
 
-    public List<Pos> FindAstar(int posX, int posZ, int destX, int destZ)
+    public List<IntVector2> FindAstar(int posX, int posZ, int destX, int destZ)
     {
         for (int x = 0; x < TileManager.Instance.boardSize; x++)
         {
@@ -91,7 +84,7 @@ public class AstarCalculater : MonoBehaviour
         // 시작점 발견 (예약 진행)
         open[posX, posZ] = 10 * (Math.Abs(destZ - posZ) + Math.Abs(destX - posX));
         pq.Push(new PQNode() { F = 10 * (Math.Abs(destZ - posZ) + Math.Abs(destX - posX)), G = 0, Z = posZ, X = posX });
-        parent[posX, posZ] = new Pos(posX, posZ);
+        parent[posX, posZ] = new IntVector2(posX, posZ);
 
         while (pq.Count > 0)
         {
@@ -145,13 +138,13 @@ public class AstarCalculater : MonoBehaviour
                 // 예약 진행
                 open[nextX, nextZ] = g + h;
                 pq.Push(new PQNode() { F = g + h, G = g, Z = nextZ, X = nextX });
-                parent[nextX, nextZ] = new Pos(node.X, node.Z);
+                parent[nextX, nextZ] = new IntVector2(node.X, node.Z);
             }
         }
 
         return CalcPathFromParent(parent, destZ, destX);
     }
-    List<Pos> CalcPathFromParent(Pos[,] parent, int destZ, int destX)
+    List<IntVector2> CalcPathFromParent(IntVector2[,] parent, int destZ, int destX)
     {
         _points.Clear();        
 
@@ -160,13 +153,13 @@ public class AstarCalculater : MonoBehaviour
 
         while (parent[this.destX, this.destZ].z != this.destZ || parent[this.destX, this.destZ].x != this.destX)
         {
-            _points.Add(new Pos(this.destX, this.destZ));
+            _points.Add(new IntVector2(this.destX, this.destZ));
             pos = parent[this.destX, this.destZ];
 
             this.destZ = pos.z;
             this.destX = pos.x;
         }
-        _points.Add(new Pos(this.destX, this.destZ));
+        _points.Add(new IntVector2(this.destX, this.destZ));
         _points.Reverse();
 
         //return _unit.SetNextPath(_points);
