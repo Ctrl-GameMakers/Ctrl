@@ -16,11 +16,11 @@ public static class SpriteData
     
         if (string.IsNullOrEmpty(folder_name))
         {
-            sprite = Resources.Load<Sprite>(file_name) as Sprite;
+            sprite = Resources.Load<Sprite>("Texture/" + file_name) as Sprite;
         }
         else
         {
-            sprite = Resources.Load<Sprite>(folder_name + "/" + file_name) as Sprite;
+            sprite = Resources.Load<Sprite>("Texture/" + folder_name + "/" + file_name) as Sprite;
         }
 
         return sprite;
