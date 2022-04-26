@@ -21,6 +21,7 @@ public enum SkillUnitGroup
 
 public enum SkillUnitSortingBase
 {
+    Random = 1 << 29,
     Ascending = 1 << 30,
     Decending = 1 << 31,
 
@@ -59,9 +60,18 @@ public enum SkillAreaForm
     Square = Area | SquareForm
 }
 
-public enum SkillDamageType
+public enum SkillEffectType
 {
-    Physic, Magic
+    Physic = 1 << 30, 
+    Magic = 1 << 31,
+
+    Damage = 1 << 0,
+    Recovery = 1 << 1,
+
+    PhysicDamage = Physic | Damage,
+    MagicDamage = Magic | Damage,
+    PhysicRecovery = Physic | Recovery,
+    MagicRecovery = Magic | Recovery,
 }
 
 public enum SkillApplyStatus
@@ -70,7 +80,7 @@ public enum SkillApplyStatus
 }
 
 
-public enum SkillEffectType
+public enum SkillAddEffectType
 {
     DamageOverTime
 }
@@ -103,7 +113,7 @@ public struct SkillData
     private int _maximumJudgmentTargetCount;
     private SkillUnitSortingBase _judgmentTargetSortingBase;
 
-    private SkillDamageType _damageType;
+    private SkillEffectType _effectType;
     private float _baseAmount;
     private SkillApplyStatus _applyStatus;
     public float _coefficientAmount;
@@ -137,7 +147,7 @@ public struct SkillData
     public int maximumJudgmentTargetCount { get => _maximumJudgmentTargetCount; }
     public SkillUnitSortingBase judgmentTargetSortingBase { get => _judgmentTargetSortingBase; }
 
-    public SkillDamageType damageType { get => _damageType; }
+    public SkillEffectType effectType { get => _effectType; }
     public float baseAmount { get => _baseAmount; }
     public SkillApplyStatus applyStatus { get => _applyStatus; }
     public float coefficientAmount { get => _coefficientAmount; }
@@ -156,26 +166,33 @@ public struct SkillData
 
         _targetGroup = (SkillUnitGroup)System.Enum.Parse(typeof(SkillUnitGroup), _skillData["TargetGroup"].ToString());
         SetValue(ref _targetRange, _skillData["TargetRange"]);
-        _targetSortingBase = (SkillUnitSortingBase)System.Enum.Parse(typeof(SkillUnitSortingBase), _skillData["TargetSortingBase"].ToString());
+        if (!_skillData["TargetSortingBase"].ToString().Equals("-"))
+            _targetSortingBase = (SkillUnitSortingBase)System.Enum.Parse(typeof(SkillUnitSortingBase), _skillData["TargetSortingBase"].ToString());
 
         SetValue(ref _skillRange, _skillData["SkillRange"]);
         SetValue(ref _judgmentTime, _skillData["JudgmentTime"]);
         SetValue(ref _afterDelay, _skillData["AfterDelay"]);
-        
-        _skillCenterPoint = (SkillCenterPoint)System.Enum.Parse(typeof(SkillCenterPoint), _skillData["SkillCenterPoint"].ToString());
+
+        if (!_skillData["SkillCenterPoint"].ToString().Equals("-")) 
+            _skillCenterPoint = (SkillCenterPoint)System.Enum.Parse(typeof(SkillCenterPoint), _skillData["SkillCenterPoint"].ToString());
         SetValue(ref _skillDuration, _skillData["SkillDuration"]);
         SetValue(ref _skillRepeatCycle, _skillData["SkillRepeatCycle"]);
 
-        _areaForm = (SkillAreaForm)System.Enum.Parse(typeof(SkillAreaForm), _skillData["AreaForm"].ToString());
+        if (!_skillData["AreaForm"].ToString().Equals("-")) 
+            _areaForm = (SkillAreaForm)System.Enum.Parse(typeof(SkillAreaForm), _skillData["AreaForm"].ToString());
         SetValue(ref _areaLength, _skillData["AreaLength"]);
         SetValue(ref _areaWidth, _skillData["AreaWidth"]);
-        _judgmentGroup = (SkillUnitGroup)System.Enum.Parse(typeof(SkillUnitGroup), _skillData["JudgmentGroup"].ToString());
+        if (!_skillData["JudgmentGroup"].ToString().Equals("-")) 
+            _judgmentGroup = (SkillUnitGroup)System.Enum.Parse(typeof(SkillUnitGroup), _skillData["JudgmentGroup"].ToString());
         SetValue(ref _maximumJudgmentTargetCount, _skillData["MaximumJudgmentTargetCount"]);
-        _judgmentTargetSortingBase = (SkillUnitSortingBase)System.Enum.Parse(typeof(SkillUnitSortingBase), _skillData["JudgmentTargetSortingBase"].ToString());
+        if (!_skillData["JudgmentTargetSortingBase"].ToString().Equals("-"))
+            _judgmentTargetSortingBase = (SkillUnitSortingBase)System.Enum.Parse(typeof(SkillUnitSortingBase), _skillData["JudgmentTargetSortingBase"].ToString());
 
-        _damageType = (SkillDamageType)System.Enum.Parse(typeof(SkillDamageType), _skillData["DamageType"].ToString());
+        if (!_skillData["EffectType"].ToString().Equals("-"))
+            _effectType = (SkillEffectType)System.Enum.Parse(typeof(SkillEffectType), _skillData["EffectType"].ToString());
         SetValue(ref _baseAmount, _skillData["BaseAmount"]);
-        _applyStatus = (SkillApplyStatus)System.Enum.Parse(typeof(SkillApplyStatus), _skillData["ApplyStatus"].ToString());
+        if (_skillData["ApplyStatus"].ToString().Equals("-"))
+            _applyStatus = (SkillApplyStatus)System.Enum.Parse(typeof(SkillApplyStatus), _skillData["ApplyStatus"].ToString());
         SetValue(ref _coefficientAmount, _skillData["CoefficientAmount"]);
 
         return this;

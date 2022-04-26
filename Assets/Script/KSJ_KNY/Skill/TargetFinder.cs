@@ -52,7 +52,7 @@ public class TargetFinder : MonoBehaviour
 
         foreach (KeyValuePair<int, UnitManager.UnitInformation> unitsPair in unitDic)
         {
-            if (unitsPair.Key != myinstanceID && !UnitManager.Instance.GetBattleUnitIsDeath(unitsPair.Key))
+            if (!UnitManager.Instance.GetBattleUnitIsDeath(unitsPair.Key))
             {
                 //타겟 탐색범위보다 멀리 있다면 Continue
                 if (Mathf.Abs(unitsPair.Value.transform.position.x - unitDic[myinstanceID].transform.position.x) > targetRange ||

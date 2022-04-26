@@ -24,6 +24,7 @@ public class UnitController : MonoBehaviour
 
     InstanceIDContainer _targetContainer;
     Vector3 _nextUnitMovePos;
+    int _chkSkillID;
 
     JudgmentObject _nowUsingJudgmentObject;
     public JudgmentObject nowUsingJudgmentObject { get => _nowUsingJudgmentObject; }
@@ -87,18 +88,20 @@ public class UnitController : MonoBehaviour
 
     void AttackAction()
     {
-        _action.Attack(_targetContainer.targetInstanceID, _status.normalSkillID);
+        _action.Attack(_targetContainer.targetInstanceID, _chkSkillID);
     }
     #endregion
 
     #region Unit AI
     private Define.UnitState Root()
     {
-        //Å¸°Ù °Ë»ö
-        if(_status.nowMP >= _status.maxMP)
-            _targetContainer = UnitManager.Instance.TargetFinder(go.GetInstanceID(), SkillManager.Instance.GetSkillData(_status.specialSkillID));
+        if (_status.nowMP >= _status.maxMP)
+            _chkSkillID = _status.specialSkillID;
         else
-            _targetContainer = UnitManager.Instance.TargetFinder(go.GetInstanceID(), SkillManager.Instance.GetSkillData(_status.normalSkillID));
+            _chkSkillID = _status.normalSkillID;        
+
+        //Å¸°Ù °Ë»ö
+        _targetContainer = UnitManager.Instance.TargetFinder(go.GetInstanceID(), SkillManager.Instance.GetSkillData(_chkSkillID));
 
 
         if (!_targetContainer.isExist)
@@ -107,7 +110,7 @@ public class UnitController : MonoBehaviour
         }            
 
         if (Vector3.Distance(transform.position, UnitManager.Instance.GetUnitPosition(_targetContainer.targetInstanceID)) 
-            <= SkillManager.Instance.GetSkillData(_status.normalSkillID).skillRange)
+            <= SkillManager.Instance.GetSkillData(_chkSkillID).skillRange)
         {
             return Attack();
         }

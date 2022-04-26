@@ -7,6 +7,8 @@ public class UnitAction : MonoBehaviour
     Transform tr;
     GameObject go;
 
+    UnitStatus unitStatus;
+
     float _moveSpeed = 2.0f;
     public bool _onAction;
 
@@ -19,6 +21,8 @@ public class UnitAction : MonoBehaviour
     {
         tr = GetComponent<Transform>();
         go = gameObject;
+
+        unitStatus = GetComponent<UnitStatus>();
     }
 
     public void Move(Vector3 goalPos)
@@ -44,9 +48,13 @@ public class UnitAction : MonoBehaviour
         
         _action = AttackAction(skillID);
         _targetInstanceID = targetInstanceID;
+
+        if (skillID.Equals(unitStatus.specialSkillID))
+        {
+            unitStatus.ResetNowMP(0.0f);
+        }
         StartCoroutine (_action);
     }
-
     
 
     IEnumerator AttackAction(int skillID)

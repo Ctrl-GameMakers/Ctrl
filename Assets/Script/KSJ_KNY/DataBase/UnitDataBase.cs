@@ -116,13 +116,10 @@ public class UnitDataBase : MonoBehaviour
             unitDataDialog[i].Clear();
         }
         unitDataDialog.Clear();
-
-        Debug.Log($"세팅완료.");
     }
 
     public UnitData GetUnitData(int _id)
     {
-        Debug.Log($"{_id} 요청들어옴.");
         return unitDB[_id];
     }
 }

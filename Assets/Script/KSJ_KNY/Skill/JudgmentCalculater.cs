@@ -18,25 +18,40 @@ public class JudgmentCalculater : MonoBehaviour
         }
     }
     
-    public void CalculationJudgment(int skillID, int casterInstanceID, int judgmentTargetInstanceID, float damageAmount)
+    public void CalculationJudgment(int skillID, int casterInstanceID, int judgmentTargetInstanceID, float Amount)
     {
-        //데미지 적용
-        if (!damageAmount.Equals(0.0f))
+        #region 기본효과 적용
+        //효과량이 0 이상이면 적용
+        if (!Amount.Equals(0.0f))
         {
-            if(UnitManager.Instance.GetUnitStatus(casterInstanceID).criticalChance > 0.0f &&  Random.Range(0.0f, 1.0f) >= UnitManager.Instance.GetUnitStatus(casterInstanceID).criticalChance)
+            if (SkillManager.Instance.GetSkillData(skillID).effectType.HasFlag(SkillEffectType.Recovery))
+            {                
+                FeedbackManager.Instance.RecoveryHP(casterInstanceID, judgmentTargetInstanceID, Amount,
+                    SkillManager.Instance.GetSkillData(skillID).effectType, UnitManager.Instance.GetUnitStatus(casterInstanceID).normalSkillID.Equals(skillID));
+
+                return;
+            }
+
+            if (UnitManager.Instance.GetUnitStatus(casterInstanceID).criticalChance > 0.0f && Random.Range(0.0f, 1.0f) >= UnitManager.Instance.GetUnitStatus(casterInstanceID).criticalChance)
             {
                 Debug.Log("치명타!!!!!!");
-                FeedbackManager.Instance.Damage(casterInstanceID, judgmentTargetInstanceID, damageAmount * UnitManager.Instance.GetUnitStatus(casterInstanceID).criticalMultiplier);
+                FeedbackManager.Instance.Damage(casterInstanceID, judgmentTargetInstanceID, Amount * UnitManager.Instance.GetUnitStatus(casterInstanceID).criticalMultiplier,
+                    SkillManager.Instance.GetSkillData(skillID).effectType, UnitManager.Instance.GetUnitStatus(casterInstanceID).normalSkillID.Equals(skillID));
             }
             else
             {
-                FeedbackManager.Instance.Damage(casterInstanceID, judgmentTargetInstanceID, damageAmount);
-            }
-            //PlayerManager.Instance.PlayerDamage(skillID, casterInstanceID, _target.gameObject.GetInstanceID());
+                FeedbackManager.Instance.Damage(casterInstanceID, judgmentTargetInstanceID, Amount,
+                    SkillManager.Instance.GetSkillData(skillID).effectType, UnitManager.Instance.GetUnitStatus(casterInstanceID).normalSkillID.Equals(skillID));
+            }            
         }
+        #endregion
+
+
     }
 
-    public float AttackDamageCalculater(int skillID, int casterInstanceID)
+
+
+    public float EffectAmountCalculater(int skillID, int casterInstanceID)
     {
         switch (SkillManager.Instance.GetSkillData(skillID).applyStatus)
         {

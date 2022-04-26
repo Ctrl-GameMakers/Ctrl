@@ -17,7 +17,7 @@ public class JudgmentObject : MonoBehaviour
     private List<int> judgmentTargetsInstanceID = new List<int>();
     private IEnumerator _judgmentDelay;
 
-    private float damageAmount;
+    private float effectAmount;
 
     private void Awake()
     {
@@ -76,7 +76,9 @@ public class JudgmentObject : MonoBehaviour
     //판정 딜레이만큼 대기 후 판정 진행
     IEnumerator JudgmentDelay()
     {
-        if(SkillManager.Instance.GetSkillData(skillID).skillCenterPoint.HasFlag(SkillCenterPoint.OfStartTime))
+        effectAmount = JudgmentCalculater.Instance.EffectAmountCalculater(skillID, casterInstanceID);
+
+        if (SkillManager.Instance.GetSkillData(skillID).skillCenterPoint.HasFlag(SkillCenterPoint.OfStartTime))
         {
             if (SkillManager.Instance.GetSkillData(skillID).skillCenterPoint.HasFlag(SkillCenterPoint.TargetLocation))
                 tr.position = UnitManager.Instance.GetUnitPosition(targetInstanceID);
@@ -102,8 +104,8 @@ public class JudgmentObject : MonoBehaviour
         {
             tr.position = UnitManager.Instance.GetUnitPosition(targetInstanceID);
 
-            damageAmount = JudgmentCalculater.Instance.AttackDamageCalculater(skillID, casterInstanceID);
-
+            if (skillID.Equals(2222))
+                Debug.Log($"222시간 {SkillManager.Instance.GetSkillData(skillID).judgmentTime}");
             yield return new WaitForSeconds(SkillManager.Instance.GetSkillData(skillID).judgmentTime);
 
             CalculationJudgment();
@@ -124,7 +126,7 @@ public class JudgmentObject : MonoBehaviour
                         judgmentTargetsInstanceID.Add(tempJudgmentTargets[i].gameObject.GetInstanceID());
                     }
                 }
-                //CalculationJudgments(skillID, judgmentTargets);
+                CalculationJudgments(skillID, judgmentTargetsInstanceID);
                 break;
             default:
                 break;
@@ -134,16 +136,17 @@ public class JudgmentObject : MonoBehaviour
 
     private void CalculationJudgment()
     {
-        JudgmentCalculater.Instance.CalculationJudgment(skillID, casterInstanceID, targetInstanceID, damageAmount);
-
+        JudgmentCalculater.Instance.CalculationJudgment(skillID, casterInstanceID, targetInstanceID, effectAmount);
         gameObject.SetActive(false);
     }
     
 
-    private void CalculationJudgments(int _id, List<Collider2D> _targetList)
+    private void CalculationJudgments(int _id, List<int> targetInstanceIDList)
     {
-        JudgmentCalculater.Instance.CalculationJudgment(skillID, casterInstanceID, targetInstanceID, damageAmount);
-
+        for(int i = 0; i < targetInstanceIDList.Count; i++)
+        {
+            JudgmentCalculater.Instance.CalculationJudgment(skillID, casterInstanceID, targetInstanceIDList[i], effectAmount);
+        }
         gameObject.SetActive(false);
     }
     
@@ -167,7 +170,7 @@ public class JudgmentObject : MonoBehaviour
 
         skillID = 0;
         casterInstanceID = 0;
-        damageAmount = 0.0f;
+        effectAmount = 0.0f;
 
         judgmentObjectPoolMgr.EnqueueObject(this);
     }

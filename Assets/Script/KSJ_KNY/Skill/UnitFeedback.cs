@@ -23,11 +23,36 @@ public class UnitFeedback : MonoBehaviour
     }
 
     //대미지는 즉시 적용
-    public void Damage(float amount)
+    public void Damage(float amount, SkillEffectType skillDamageType)
     {
-        Debug.Log($"방어력 테스트{amount} => {amount * (100.0f / (100.0f + _unitStatus.defence))}");
-        _unitStatus.IncreaseHP(-(amount * (100.0f / (100.0f + _unitStatus.defence))));
+        if(skillDamageType.HasFlag(SkillEffectType.Physic))
+        {
+            //Debug.Log($"방어력 테스트{amount} => {amount * (100.0f / (100.0f + _unitStatus.defence))}");
+            _unitStatus.IncreaseHP(-(amount * (100.0f / (100.0f + _unitStatus.defence))));
+            _unitStatus.IncreaseMP(5.0f);
+            return;
+        }
+
+        if(skillDamageType.HasFlag(SkillEffectType.Magic))
+        {
+            //Debug.Log($"주문저항력 테스트{amount} => {amount * (100.0f / (100.0f + _unitStatus.spellResistance))}");
+            _unitStatus.IncreaseHP(-(amount * (100.0f / (100.0f + _unitStatus.spellResistance))));
+            _unitStatus.IncreaseMP(5.0f);
+            return;
+        }
     }
+
+    public void RecoveryHP(float amount)
+    {
+        Debug.Log($"회복한다. {gameObject.GetInstanceID()} 를 {amount}만큼 회복한다.");
+        _unitStatus.IncreaseHP(amount);
+    }
+
+    public void RecoveryMP(float amount)
+    {
+        _unitStatus.IncreaseMP(amount);
+    }
+
 
     //Dot는 StatusEffect List에 추가
     public void DamageOverTime(int casterInstanceID, float amount, float duration)
@@ -37,7 +62,6 @@ public class UnitFeedback : MonoBehaviour
         _effectList[_effectList.Count - 1].SetActive(true);
         ActiveEffect(_effectList[_effectList.Count - 1]);
     }
-
 
     //StatusEffect List에 저장된 상태이상 적용
     //저장된 startTime을 조건으로 지속시간을 관리하고, 적용중인 상태이상 효과를 적용
@@ -118,7 +142,7 @@ abstract public class StatusEffect
 {
     protected bool _active;
     protected float _startTime;
-    protected SkillEffectType _effectType;
+    protected SkillAddEffectType _effectType;
     protected UnitStatus _unitStatus;
 
     protected int _effectCasterInstanceID;
@@ -127,7 +151,7 @@ abstract public class StatusEffect
 
     public bool active { get => _active; }
     public float startTime { get => _startTime; }
-    public SkillEffectType effectType { get => _effectType; }
+    public SkillAddEffectType effectType { get => _effectType; }
     public UnitStatus unitStatus { get => _unitStatus; }
     public int casterInstanceID { get => _effectCasterInstanceID; }
     public float effectAmount { get => _effectAmount; }
@@ -161,7 +185,7 @@ public class DamageOverTime : StatusEffect
 
     public override void SetType()
     {
-        _effectType = SkillEffectType.DamageOverTime;
+        _effectType = SkillAddEffectType.DamageOverTime;
     }
     public override void SetActive(bool _value)
     {

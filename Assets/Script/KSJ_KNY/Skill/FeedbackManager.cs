@@ -19,9 +19,20 @@ public class FeedbackManager : MonoBehaviour
     }
 
 
-    public void Damage(int casterInstanceID, int judgmentTargetInstanceID, float amount)
+    public void Damage(int casterInstanceID, int judgmentTargetInstanceID, float amount, SkillEffectType skillEffectType, bool mpRecovery)
     {
-        UnitManager.Instance.GetUnitFeedback(judgmentTargetInstanceID).Damage(amount);
+        UnitManager.Instance.GetUnitFeedback(judgmentTargetInstanceID).Damage(amount, skillEffectType);
+
+        if (mpRecovery)
+            UnitManager.Instance.GetUnitFeedback(casterInstanceID).RecoveryMP(10.0f);
+    }
+
+    public void RecoveryHP(int casterInstanceID, int judgmentTargetInstanceID, float amount, SkillEffectType skillDamageType, bool mpRecovery)
+    {
+        UnitManager.Instance.GetUnitFeedback(judgmentTargetInstanceID).RecoveryHP(amount);
+
+        if (mpRecovery)
+            UnitManager.Instance.GetUnitFeedback(casterInstanceID).RecoveryMP(10.0f);
     }
 
 }

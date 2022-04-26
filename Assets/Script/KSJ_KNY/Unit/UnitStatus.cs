@@ -57,18 +57,54 @@ public class UnitStatus : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log(unitID);
         SetUnitBaseStatus(UnitManager.Instance.GetUnitData(_unitID));
     }
 
-    public void IncreaseHP(float value)
+    public void IncreaseHP(float amount)
     {
-        if (nowHP + value > 0)
-            _nowHP += value;
+        if (nowHP + amount > 0)
+        {
+            if(nowHP + amount >= maxHP)
+                _nowHP = maxHP;
+            else
+                _nowHP += amount;
+        }
         else
         {
             _nowHP = 0.0f;
             _unitController.Death();
+        }
+    }
+
+    public void IncreaseMP(float amount)
+    {
+        if (nowMP + amount > maxMP)
+        {
+            _nowMP = maxMP;
+        }
+        else if (nowMP + amount < 0)
+        {
+            _nowMP = 0.0f;
+        }
+        else
+        {
+            _nowMP += amount;
+        }
+    }
+
+    public void ResetNowMP(float value)
+    {
+        if (value > maxMP)
+        {
+            _nowMP = maxMP;
+        }
+        else if (value < 0)
+        {
+            _nowMP = 0.0f;
+        }
+        else
+        {
+            _nowMP = value;
         }
     }
 
@@ -94,6 +130,9 @@ public class UnitStatus : MonoBehaviour
 
             _criticalChance = unitBaseData.criticalChance;
             _criticalMultiplier = unitBaseData.criticalMultiplier;
+
+            _normalSkillID = unitBaseData.normalSkillID;
+            _specialSkillID = unitBaseData.specialSkillID;
 
             unitModelingObject = Instantiate(unitBaseData.unitVisualObjectPrefab, transform);
             unitModelingObject.transform.localPosition = Vector3.zero;
