@@ -26,6 +26,7 @@ public class UnitController : MonoBehaviour
     Vector3 _nextUnitMovePos;
     int _chkSkillID;
 
+    GameObject _unitModelingObject;
     JudgmentObject _nowUsingJudgmentObject;
     public JudgmentObject nowUsingJudgmentObject { get => _nowUsingJudgmentObject; }
 
@@ -147,5 +148,12 @@ public class UnitController : MonoBehaviour
         }
         _state = Define.UnitState.Die;
         UnitManager.Instance.SetUnitDeath(go.GetInstanceID());
+
+        _unitModelingObject.GetComponent<UnitModelingObject>().ReturnUnitObject();
+        gameObject.SetActive(false);
     }
+
+
+    public void SetUnitModelingObject(GameObject gameObject) { _unitModelingObject = gameObject; }
+
 }

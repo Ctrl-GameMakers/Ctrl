@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class UnitStatus : MonoBehaviour
 {
+    Transform tr;
+    GameObject go;
+
     // Start is called before the first frame update
     private UnitController _unitController;
 
@@ -42,9 +45,8 @@ public class UnitStatus : MonoBehaviour
     public int normalSkillID { get => _normalSkillID; }
     public int specialSkillID { get => _specialSkillID; }
 
-
-    private UnitData unitBaseData;
-    [SerializeField] private GameObject unitModelingObject;
+    private UnitData _unitBaseData;
+    [SerializeField] private GameObject _unitModelingObject;
 
     private bool _settingComplete;
     public bool settingComplete { get => _settingComplete; }
@@ -52,6 +54,9 @@ public class UnitStatus : MonoBehaviour
 
     void Awake()
     {
+        tr = GetComponent<Transform>();
+        go = gameObject;
+
         _unitController = GetComponent<UnitController>();
     }
 
@@ -112,33 +117,34 @@ public class UnitStatus : MonoBehaviour
     {
         if(!_settingComplete)
         {
-            if (!unitBaseData.id.Equals(unitData.id))
+            if (!_unitBaseData.id.Equals(unitData.id))
             {
-                unitBaseData = unitData;
+                _unitBaseData = unitData;
             }
 
-            _maxHP = unitBaseData.maxHP;
+            _maxHP = _unitBaseData.maxHP;
             _nowHP = maxHP;
 
-            _maxMP = unitBaseData.maxMP;
+            _maxMP = _unitBaseData.maxMP;
             _nowMP = 0.0f;
 
-            _attackPower = unitBaseData.attackPower;
-            _spellPower = unitBaseData.spellPower;
-            _defence = unitBaseData.defence;
-            _spellResistance = unitBaseData.spellResistance;
+            _attackPower = _unitBaseData.attackPower;
+            _spellPower = _unitBaseData.spellPower;
+            _defence = _unitBaseData.defence;
+            _spellResistance = _unitBaseData.spellResistance;
 
-            _criticalChance = unitBaseData.criticalChance;
-            _criticalMultiplier = unitBaseData.criticalMultiplier;
+            _criticalChance = _unitBaseData.criticalChance;
+            _criticalMultiplier = _unitBaseData.criticalMultiplier;
 
-            _normalSkillID = unitBaseData.normalSkillID;
-            _specialSkillID = unitBaseData.specialSkillID;
+            _normalSkillID = _unitBaseData.normalSkillID;
+            _specialSkillID = _unitBaseData.specialSkillID;
 
-            unitModelingObject = Instantiate(unitBaseData.unitVisualObjectPrefab, transform);
-            unitModelingObject.transform.localPosition = Vector3.zero;
-            unitModelingObject.transform.localRotation = Quaternion.identity;
+            _unitController.SetUnitModelingObject(UnitModelingObjectPoolMgr.Instance.CallUnitModelingObject(unitID, tr));
+            
 
             _settingComplete = true;
         }      
     }
+
+
 }

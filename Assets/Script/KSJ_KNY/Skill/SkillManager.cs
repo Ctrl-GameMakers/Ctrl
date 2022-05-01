@@ -38,7 +38,7 @@ public class SkillManager : MonoBehaviour
         switch (GetSkillData(skillID).skillCenterPoint)
         {
             case SkillCenterPoint.Target:
-                _judgmentObjectPoolMgr.ActiveSkill(skillID, _casterInstanceID, _targetInstanceID);
+                _judgmentObjectPoolMgr.CallSkillObject(skillID, _casterInstanceID, _targetInstanceID);
                 break;
                 
             case SkillCenterPoint.TargetLocation:

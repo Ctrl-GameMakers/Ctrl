@@ -23,7 +23,8 @@ public struct UnitData
     private int _normalSkillID;
     private int _specialSkillID;
 
-    private GameObject _unitVisualObjectPrefab;
+    private string _unitModelingObjectName;
+    private GameObject _unitModelingObjectPrefab;
 
     public int id { get => _id; }
     public string nameKor { get => _nameKor; }
@@ -42,7 +43,8 @@ public struct UnitData
     public int normalSkillID { get => _normalSkillID; }
     public int specialSkillID { get => _specialSkillID; }
 
-    public GameObject unitVisualObjectPrefab { get => _unitVisualObjectPrefab; }
+    public string unitModelingObjectName { get => _unitModelingObjectName; }
+    public GameObject unitModelingObjectPrefab { get => _unitModelingObjectPrefab; }
 
 
 
@@ -65,7 +67,8 @@ public struct UnitData
         SetValue(ref _normalSkillID, _unitData["NormalSkillID"]);
         SetValue(ref _specialSkillID, _unitData["SpecialSkillID"]);
 
-        SetValue(ref _unitVisualObjectPrefab, _unitData["UnitVisualObjectPrefab"]);
+        _unitModelingObjectName = _unitData["UnitVisualObjectPrefab"].ToString();
+        SetValue(ref _unitModelingObjectPrefab, _unitData["UnitVisualObjectPrefab"]);
 
         return this;
     }

@@ -27,8 +27,15 @@ public class UnitManager : MonoBehaviour
         { _unit = go; _transform = tr; _unitController = controller; _unitStatus = status; _unitFeedback = feedback; _instanceID = go.GetInstanceID(); }
 
     }
+    [Header("Unit parent transform")]
+    [SerializeField] private Transform _unitparent;
 
+    [Header("Unit base prefab")]
+    [SerializeField] private GameObject _unitBase;
+
+    [Header("Unit database")]
     [SerializeField] UnitDataBase _unitDataBase;
+
     List<UnitInformation> _controllerList = new List<UnitInformation>();
 
     private bool _isBattleMode;
@@ -42,16 +49,16 @@ public class UnitManager : MonoBehaviour
     private IntVector2 myTilePos;
     private IntVector2 targetTilePos;
 
-    static UnitManager s_instance;
+    static UnitManager minstance;
     public static UnitManager Instance
     {
         get
         {
-            if (s_instance == null)
+            if (minstance == null)
             {
-                s_instance = FindObjectOfType<UnitManager>();
+                minstance = FindObjectOfType<UnitManager>();
             }
-            return s_instance;
+            return minstance;
         }
     }
 
@@ -80,7 +87,10 @@ public class UnitManager : MonoBehaviour
         _controllerList.Add(new UnitInformation(controller.gameObject, controller.transform, controller, controller.GetComponent<UnitStatus>(), controller.GetComponent<UnitFeedback>()));
     }
 
+    public void CreateUnit(int unitID, Vector3 pos)
+    {
 
+    }
 
     #region Astar Nav
     public Vector3 NextPos(int myInstanceID, int targetInstanceID)
