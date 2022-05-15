@@ -42,14 +42,7 @@ public class UIMapTool : UIBase
 
     public void onBtnCreateCube()
     {
-        //show cube list
-        UIManager.getinstance<UIMapTool_MaterialList>().show(0);
-    }
-
-    public void onBtnCreateStructure()
-    {
-        //show structure list
-        UIManager.getinstance<UIMapTool_MaterialList>().show(1);
+        UIManager.getinstance<UIMapTool_MaterialList>().show();
     }
 
     public void onBtnChangeSkyBox()

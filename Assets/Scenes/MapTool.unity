@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.67575175, g: 0.7790319, b: 0.7893795, a: 1}
+  m_IndirectSpecularColor: {r: 0.67433286, g: 0.77783763, b: 0.78887975, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -830,11 +830,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIMapTool_MaterialList
       objectReference: {fileID: 0}
-    - target: {fileID: 65086206201816958, guid: 7225938322bbbd84da1b16a779fd2058,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7225938322bbbd84da1b16a779fd2058, type: 3}
 --- !u!1001 &4732190224308488221
@@ -844,6 +839,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2100140495}
     m_Modifications:
+    - target: {fileID: 4732190223416123448, guid: 22e33a1a09e9cb243b5c4f75d674af52,
+        type: 3}
+      propertyPath: m_Name
+      value: txt_material
+      objectReference: {fileID: 0}
+    - target: {fileID: 4732190223416123450, guid: 22e33a1a09e9cb243b5c4f75d674af52,
+        type: 3}
+      propertyPath: m_Text
+      value: "\uC7AC\uB8CC\n\uC120\uD0DD"
+      objectReference: {fileID: 0}
+    - target: {fileID: 4732190223430867685, guid: 22e33a1a09e9cb243b5c4f75d674af52,
+        type: 3}
+      propertyPath: m_Name
+      value: btn_material
+      objectReference: {fileID: 0}
     - target: {fileID: 4732190224376383826, guid: 22e33a1a09e9cb243b5c4f75d674af52,
         type: 3}
       propertyPath: m_Pivot.x
@@ -953,6 +963,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: UIMapTool
+      objectReference: {fileID: 0}
+    - target: {fileID: 4732190224376383827, guid: 22e33a1a09e9cb243b5c4f75d674af52,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6694334210444865266, guid: 22e33a1a09e9cb243b5c4f75d674af52,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8507124305934886976, guid: 22e33a1a09e9cb243b5c4f75d674af52,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -271.00003
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22e33a1a09e9cb243b5c4f75d674af52, type: 3}
