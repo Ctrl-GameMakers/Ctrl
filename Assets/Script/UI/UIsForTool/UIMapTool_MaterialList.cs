@@ -9,14 +9,28 @@ public class UIMapTool_MaterialList : UIBase
     private const int _cube_list = 0;
     private const int _structure_list = 1;
 
+    public Transform tr_parent;
+    public Item_Cube source_cube;
+    private List<Item_Cube> _list_item_cube = new List<Item_Cube>();
+
+    private Material[] _materials;
+    private Material _current_material;
+
     public RectTransform[] rt_root_tap;
     public RectTransform rt_tap_select;
+
+    public void Awake()
+    {
+        _materials = Resources.LoadAll<Material>("BJYPrefab/Materials");
+    }
 
     public override void initUI()
     {
         base.initUI();
 
         _current_select_menu = _cube_list;
+
+        source_cube.gameObject.SetActive(false);
     }
 
     public override void show()
@@ -28,17 +42,36 @@ public class UIMapTool_MaterialList : UIBase
 
     private void _setup()
     {
-        onBtnTapSelect(_current_select_menu);
+        onBtnTapSelect(_current_select_menu);   
     }
 
     private void _refresh_cube_list()
     {
+        for (int i = 0; i < _list_item_cube.Count; i++)
+            _list_item_cube[i].gameObject.SetActive(false);
 
+        int j = 0;
+        for (int i = 0; i < _materials.Length; i++)
+        {
+            if (_list_item_cube.Count <= i)
+                _list_item_cube.Add(GameObjectCache.Make<Item_Cube>(source_cube, tr_parent));
+
+            _list_item_cube[i].setup(_materials[i]);
+            _list_item_cube[i].gameObject.SetActive(true);
+
+            j++;
+        }
+
+        for (int i = j; i < _list_item_cube.Count; i++)
+        {
+            _list_item_cube[i].gameObject.SetActive(false);
+        }
     }
 
     private void _refresh_sturcture_list()
     {
-
+        for (int i = 0; i < _list_item_cube.Count; i++)
+            _list_item_cube[i].gameObject.SetActive(false);
     }
 
     public void onBtnTapSelect(int tap_index)

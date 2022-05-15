@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.67433286, g: 0.77783763, b: 0.78887975, a: 1}
+  m_IndirectSpecularColor: {r: 0.67575175, g: 0.7790319, b: 0.7893795, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -829,6 +829,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: UIMapTool_MaterialList
+      objectReference: {fileID: 0}
+    - target: {fileID: 65086206201816958, guid: 7225938322bbbd84da1b16a779fd2058,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7225938322bbbd84da1b16a779fd2058, type: 3}
