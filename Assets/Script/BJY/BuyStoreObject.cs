@@ -95,7 +95,8 @@ public class BuyStoreObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
     }
 
     void PutStorePlayer(){
-        UnitManager.Instance.CallUnit(10001,_endPos,eTag.Ally);
+        int id = StoreManager.ReturnStorePlayerID(_initialPos);
+        UnitManager.Instance.CallUnit(id, _endPos,eTag.Ally);
         Destroy(this.gameObject);
     }
 
