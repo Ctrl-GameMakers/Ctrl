@@ -8,6 +8,7 @@ public class StoreManager : MonoBehaviour
 {
     GameObject[] PlayerArray = new GameObject[5];
     GameObject[] StorePlayerArray = new GameObject[5];
+    private static int[] _unitIDArray = new int[5];
     public Button _rerollBtn;
     Vector3 _newPos;
     System.Random random = new System.Random();
@@ -42,20 +43,20 @@ public class StoreManager : MonoBehaviour
     }
 
     void CreateStorePlayer(){
-        int n;
         for(int i = 0; i<5; i++){
+            int unitID = random.Next(10001,10005);
+            _unitIDArray[i] = unitID;
             _newPos.x = -5.0f + 2*i;
-            n = random.Next(0,1);
-
-            StorePlayerArray[i] = Instantiate(PlayerArray[n]) as GameObject;
+            StorePlayerArray[i] = Instantiate(PlayerArray[i]) as GameObject;
             StorePlayerArray[i].transform.position = _newPos;
             StorePlayerArray[i].SetActive(true);
 
-            var a = UnitManager.Instance.CallUnitModelingObject(random.Next(10001,10005), StorePlayerArray[i].transform).GetComponentsInChildren<Transform>();
+            var a = UnitManager.Instance.CallUnitModelingObject(unitID, StorePlayerArray[i].transform).GetComponentsInChildren<Transform>();
             for(int j=0;j<a.Length;j++){
                 a[j].gameObject.layer = 6;
+                a[j].rotation = Quaternion.Euler(0,-180,0);
             }
-
+        
         }
     }
 
@@ -63,5 +64,12 @@ public class StoreManager : MonoBehaviour
         foreach(GameObject toDestroy in StorePlayerArray)
             Destroy(toDestroy);
     }
+
+    public static int ReturnStorePlayerID(Vector3 position){
+        int i = (int) Math.Abs(5.0f + position.x)/2;
+        return _unitIDArray[i];
+    }
+
+    
 
 }
