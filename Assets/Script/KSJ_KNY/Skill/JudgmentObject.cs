@@ -8,7 +8,7 @@ public class JudgmentObject : MonoBehaviour
 
     Transform tr;
     GameObject go;
-    JudgmentObjectPoolMgr judgmentObjectPoolMgr;
+    JudgmentObjectPool judgmentObjectPoolMgr;
 
     private int skillID;
     private int casterInstanceID;
@@ -23,7 +23,7 @@ public class JudgmentObject : MonoBehaviour
     {
         tr = GetComponent<Transform>();
         go = gameObject;
-        judgmentObjectPoolMgr = GetComponentInParent<JudgmentObjectPoolMgr>();
+        judgmentObjectPoolMgr = GetComponentInParent<JudgmentObjectPool>();
     }
 
     //최초로 만들어 졌을 경우에만 자동으로 비활성화 (최초 Pool제작 시)
@@ -49,6 +49,7 @@ public class JudgmentObject : MonoBehaviour
 
     public void ActiveSkill(int skillID, int casterInstanceID, int targetInstanceID)
     {
+        Debug.Log("오이오이");
         go.SetActive(true);
 
         this.skillID = skillID;

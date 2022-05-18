@@ -1,7 +1,7 @@
 ﻿ID,NameKor,MaxHP,MaxMP,AttackPower,SpellPower,Defence,SpellResistance,CriticalChance,CriticalMultiplier,NormalSkillID,SpecialSkillID,UnitVisualObjectPrefab
 Int,String,Float,Float,Float,Float,Float,Float,Float,Float,Int,Int,String
 ID,유닛명(한글),최대HP,최대MP,물리공격력,주문공격력,방어력,주문저항력,치명타확률,치명타배율,일반스킬,특수스킬,유닛모델링Prefab
-10001,테스트10001,350,100,100,200,150,300,0.5,2.5,1111,3333,RedCube
-10002,테스트10002,250,75,100,300,50,350,0.1,1.5,1111,2222,GreenCube
+10001,테스트10001,350,100,100,200,150,300,0.5,2.5,1111,3333,TreasureGoblinBlue
+10002,테스트10002,250,75,100,300,50,350,0.1,1.5,1111,2222,TreasureGoblinGreen
 10003,테스트10003,300,100,100,200,100,200,0.4,2,1111,3333,BlueCube
 10004,테스트10004,500,125,80,200,300,300,0.2,1.5,1111,4444,RedCube

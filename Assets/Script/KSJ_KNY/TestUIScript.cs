@@ -18,6 +18,10 @@ public class TestUIScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!transform.rotation.Equals(Camera.main.transform.rotation))
+        {
+            transform.rotation = Camera.main.transform.rotation;
+        }
         if(unitStatus.nowHP.Equals(0.0f))
         {
             gameObject.SetActive(false);

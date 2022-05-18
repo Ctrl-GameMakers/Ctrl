@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(UnitController))]
 public class UnitStatus : MonoBehaviour
 {
     Transform tr;
@@ -60,8 +61,9 @@ public class UnitStatus : MonoBehaviour
         _unitController = GetComponent<UnitController>();
     }
 
-    private void Start()
+    public void SetUnitID(int id)
     {
+        _unitID = id;
         SetUnitBaseStatus(UnitManager.Instance.GetUnitData(_unitID));
     }
 
@@ -139,7 +141,7 @@ public class UnitStatus : MonoBehaviour
             _normalSkillID = _unitBaseData.normalSkillID;
             _specialSkillID = _unitBaseData.specialSkillID;
 
-            _unitController.SetUnitModelingObject(UnitModelingObjectPoolMgr.Instance.CallUnitModelingObject(unitID, tr));
+            _unitController.SetUnitModelingObject(UnitManager.Instance.CallUnitModelingObject(unitID, GetComponent<Transform>()));
             
 
             _settingComplete = true;

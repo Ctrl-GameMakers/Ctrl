@@ -21,15 +21,16 @@ public class UnitModelingObject : MonoBehaviour
         tr.parent = parent;
         tr.localPosition = Vector3.zero;
         tr.localRotation = Quaternion.identity;
+
+        if(GetComponentInParent<UnitController>() != null)
+        {
+            GetComponentInParent<UnitController>().animator = GetComponent<Animator>();
+        }
     }
 
     public void ReturnUnitObject()
     {
-        if (UnitModelingObjectPoolMgr.Instance.activeSelf)
-        {
-            UnitModelingObjectPoolMgr.Instance.EnqueueObject(this);
-        }
-
+        UnitManager.Instance.ReturnUnitModelingObject(this);
         go.SetActive(false);
     }
 

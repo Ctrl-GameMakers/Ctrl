@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JudgmentObjectPoolMgr : MonoBehaviour
+public class JudgmentObjectPool : MonoBehaviour
 {
     [SerializeField] float startCreateCount;
     [SerializeField] GameObject judgmentObject;
@@ -12,26 +12,22 @@ public class JudgmentObjectPoolMgr : MonoBehaviour
     void Awake()
     {
         judgmentObjectQueue.Clear();
-
-        for (int i = 0; i < startCreateCount; i++)
-        {
-            judgmentObjectQueue.Enqueue(Instantiate(judgmentObject, transform).GetComponent<JudgmentObject>());
-        }
+        judgmentObject = Resources.Load("SkillPrefab/JudgmentObject") as GameObject;
     }
 
     
     public void CallSkillObject(int skillID, int casterInstanceID, int targetInstanceID)
     {
-        ChkjudgmentObjectQueue();
-        judgmentObjectQueue.Dequeue().ActiveSkill(skillID, casterInstanceID, targetInstanceID);
-    }
-
-    private void ChkjudgmentObjectQueue()
-    {
-        if (judgmentObjectQueue.Count.Equals(0))
+        if(!ChkjudgmentObjectQueue())
         {
             judgmentObjectQueue.Enqueue(Instantiate(judgmentObject, transform).GetComponent<JudgmentObject>());
         }
+        judgmentObjectQueue.Dequeue().ActiveSkill(skillID, casterInstanceID, targetInstanceID);
+    }
+
+    private bool ChkjudgmentObjectQueue()
+    {
+        return !judgmentObjectQueue.Count.Equals(0);
     }
 
     public void EnqueueObject(JudgmentObject judgmentObject)

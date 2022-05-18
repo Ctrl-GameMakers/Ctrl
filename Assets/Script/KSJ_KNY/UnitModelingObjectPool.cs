@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitModelingObjectPoolMgr : MonoBehaviour
+public class UnitModelingObjectPool : MonoBehaviour
 {
     Transform tr;
     GameObject go;
@@ -12,20 +12,6 @@ public class UnitModelingObjectPoolMgr : MonoBehaviour
     Dictionary<string, Queue<UnitModelingObject>> modelingObjectsDic = new Dictionary<string, Queue<UnitModelingObject>>(); 
 
     private GameObject tempObject;
-
-    static UnitModelingObjectPoolMgr minstance;
-    public static UnitModelingObjectPoolMgr Instance
-    {
-        get
-        {
-            if (minstance == null)
-            {
-                minstance = FindObjectOfType<UnitModelingObjectPoolMgr>();
-            }
-            return minstance;
-        }
-    }
-
 
     void Awake()
     {

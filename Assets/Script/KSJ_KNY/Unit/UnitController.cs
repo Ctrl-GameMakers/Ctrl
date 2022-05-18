@@ -10,6 +10,10 @@ public struct IntVector2
     public IntVector2(int x, int z) { this.x = x; this.z = z; }
 }
 
+
+[RequireComponent(typeof(UnitStatus))]
+[RequireComponent(typeof(UnitAction))]
+[RequireComponent(typeof(UnitFeedback))]
 public class UnitController : MonoBehaviour
 {
     Transform tr;
@@ -27,11 +31,15 @@ public class UnitController : MonoBehaviour
     int _chkSkillID;
 
     GameObject _unitModelingObject;
+    public GameObject unitModelingObject { get => _unitModelingObject; }
+
     JudgmentObject _nowUsingJudgmentObject;
     public JudgmentObject nowUsingJudgmentObject { get => _nowUsingJudgmentObject; }
 
     UnitAction _action;
     UnitStatus _status;
+
+    public Animator animator;
 
     void Start()
     {
@@ -150,6 +158,9 @@ public class UnitController : MonoBehaviour
         UnitManager.Instance.SetUnitDeath(go.GetInstanceID());
 
         _unitModelingObject.GetComponent<UnitModelingObject>().ReturnUnitObject();
+
+        _unitModelingObject = null;
+
         gameObject.SetActive(false);
     }
 

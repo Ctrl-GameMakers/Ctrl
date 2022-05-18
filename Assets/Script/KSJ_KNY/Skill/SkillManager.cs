@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SkillDataBase))]
 public class SkillManager : MonoBehaviour
 {
     [Header("Required Component")]
     [SerializeField] SkillDataBase _skillDataBase;
     //[SerializeField] ProjectilePoolMgr _projectilePoolMgr;
-    [SerializeField] JudgmentObjectPoolMgr _judgmentObjectPoolMgr;
+    [SerializeField] JudgmentObjectPool _judgmentObjectPool;
 
 
     //singleton
@@ -28,7 +29,16 @@ public class SkillManager : MonoBehaviour
     {
         _skillDataBase = GetComponent<SkillDataBase>();
         //_projectilePoolMgr = GetComponentInChildren<ProjectilePoolMgr>();
-        _judgmentObjectPoolMgr = GetComponentInChildren<JudgmentObjectPoolMgr>();
+
+        if (GetComponentInChildren<JudgmentObjectPool>() == null)
+        {
+            GameObject newGameObject = new GameObject("@JudgmentObjectPool");
+            newGameObject.GetComponent<Transform>().parent = transform;
+            newGameObject.AddComponent<JudgmentObjectPool>();
+        }
+
+        _judgmentObjectPool = GetComponentInChildren<JudgmentObjectPool>();
+
     }
 
     public void UseSkill(int skillID, int _casterInstanceID, int _targetInstanceID)
@@ -38,7 +48,7 @@ public class SkillManager : MonoBehaviour
         switch (GetSkillData(skillID).skillCenterPoint)
         {
             case SkillCenterPoint.Target:
-                _judgmentObjectPoolMgr.CallSkillObject(skillID, _casterInstanceID, _targetInstanceID);
+                _judgmentObjectPool.CallSkillObject(skillID, _casterInstanceID, _targetInstanceID);
                 break;
                 
             case SkillCenterPoint.TargetLocation:
