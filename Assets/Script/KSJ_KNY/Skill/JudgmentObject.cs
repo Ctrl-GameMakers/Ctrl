@@ -26,30 +26,12 @@ public class JudgmentObject : MonoBehaviour
         judgmentObjectPoolMgr = GetComponentInParent<JudgmentObjectPool>();
     }
 
-    //ÃÖÃÊ·Î ¸¸µé¾î Á³À» °æ¿ì¿¡¸¸ ÀÚµ¿À¸·Î ºñÈ°¼ºÈ­ (ÃÖÃÊ PoolÁ¦ÀÛ ½Ã)
-    //±× ¿Ü¿¡´Â ±âÁ¸ °è»êÇØ µÎ¾ú´ø Å¸°Ù¸®½ºÆ® ÃÊ±âÈ­
-    private void OnEnable()
-    {
-        if (!isTrial)
-        {
-            judgmentTargetsInstanceID.Clear();
-        }
-    }
-
-    private void Start()
-    {
-        if(isTrial)
-        {
-            if (go.activeSelf)
-            {
-                go.SetActive(false);
-            }
-        }
-    }
+    //ï¿½ï¿½ï¿½Ê·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿¡ï¿½ï¿½ ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­ (ï¿½ï¿½ï¿½ï¿½ Poolï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½)
+    //ï¿½ï¿½ ï¿½Ü¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î¾ï¿½ï¿½ï¿½ Å¸ï¿½Ù¸ï¿½ï¿½ï¿½Æ® ï¿½Ê±ï¿½È­
 
     public void ActiveSkill(int skillID, int casterInstanceID, int targetInstanceID)
     {
-        Debug.Log("¿ÀÀÌ¿ÀÀÌ");
+        Debug.Log("ï¿½ï¿½ï¿½Ì¿ï¿½ï¿½ï¿½");
         go.SetActive(true);
 
         this.skillID = skillID;
@@ -74,7 +56,7 @@ public class JudgmentObject : MonoBehaviour
             go.SetActive(false);
     }
 
-    //ÆÇÁ¤ µô·¹ÀÌ¸¸Å­ ´ë±â ÈÄ ÆÇÁ¤ ÁøÇà
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½Å­ ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     IEnumerator JudgmentDelay()
     {
         effectAmount = JudgmentCalculater.Instance.EffectAmountCalculater(skillID, casterInstanceID);
@@ -106,14 +88,14 @@ public class JudgmentObject : MonoBehaviour
             tr.position = UnitManager.Instance.GetUnitPosition(targetInstanceID);
 
             if (skillID.Equals(2222))
-                Debug.Log($"222½Ã°£ {SkillManager.Instance.GetSkillData(skillID).judgmentTime}");
+                Debug.Log($"222ï¿½Ã°ï¿½ {SkillManager.Instance.GetSkillData(skillID).judgmentTime}");
             yield return new WaitForSeconds(SkillManager.Instance.GetSkillData(skillID).judgmentTime);
 
             CalculationJudgment();
         }
     }
 
-    //½ºÅ³Á¤º¸ ÂüÁ¶ÇØ¼­ ¹üÀ§ ³» Å¸°Ù ÆÇÁ¤
+    //ï¿½ï¿½Å³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     private void FindJudgmentTarget()
     {
         switch (SkillManager.Instance.GetSkillData(skillID).areaForm)

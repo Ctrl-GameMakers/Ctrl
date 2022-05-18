@@ -190,7 +190,7 @@ public class UnitManager : MonoBehaviour
 
         for (int i = 0; i < _controllerList.Count; i++)
         {
-            if (_controllerList[i].unitController._onField)
+            if (_controllerList[i].unitController.CheckOnField())
             {
                 battleUnitDic.Add(_controllerList[i].unit.GetInstanceID(), _controllerList[i]);
                 battleUnitDeathDic.Add(_controllerList[i].unit.GetInstanceID(), false);

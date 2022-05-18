@@ -15,7 +15,7 @@ public class BuyStoreObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
         if(_storeCamera == null){
             _storeCamera = GameObject.Find("StoreCamera").GetComponent<Camera>();
         }
-        _endPos.y = 1.0f;
+        _endPos.y = 0.0f;
         _endPos.z = - 2.0f;
 
     }
@@ -43,8 +43,8 @@ public class BuyStoreObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
         else {
             _currentPosWorld = Camera.main.ScreenToWorldPoint(new Vector3(_currentPos.x,_currentPos.y,distance));
             
-            if(_currentPosWorld.y != 1.0f){
-                _currentPosWorld.y = 1.0f;
+            if(_currentPosWorld.y != 0.0f){
+                _currentPosWorld.y = 0.0f;
             }
             if(_currentPosWorld.z != -2.0f){
                 _currentPosWorld.z = -2.0f;
@@ -95,9 +95,7 @@ public class BuyStoreObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
     }
 
     void PutStorePlayer(){
-        GameObject obj = Instantiate(Resources.Load("BJYPrefab/Player")) as GameObject;
-        obj.transform.position = _endPos;
-        obj.SetActive(true);
+        UnitManager.Instance.CallUnit(10001,_endPos,eTag.Ally);
         Destroy(this.gameObject);
     }
 

@@ -8,8 +8,8 @@ public class PlayerManager : MonoBehaviour
     Button levelUpBtn;
     private static int playerLevel;
     private static int playerExp;
-    private static int[] expToLevelup = new int[100];
-    private static int[] reducingMana = new int[100];
+    private static int[] expToLevelup = {2,6,10,20,36,56,80,108,140,170,190,210};
+    private const int reducingMana=1;
 
     private static int mana;
 
@@ -20,22 +20,12 @@ public class PlayerManager : MonoBehaviour
         if(levelUpBtn != null){
             levelUpBtn.onClick.AddListener(LevelUpBtnClick);
         }
-
     }
 
     void InitPlayerInfo(){
         playerLevel=1;
         playerExp=0;
         mana=20;
-
-        for(int i=0; i<expToLevelup.Length; i++){
-            expToLevelup[i] = 20;
-        }
-
-        for(int i=0; i<expToLevelup.Length; i++){
-            reducingMana[i] = (i+1)*2;
-        }
-
     }
 
     public static int GetPlayerLevel(){
@@ -51,9 +41,9 @@ public class PlayerManager : MonoBehaviour
     }
     
     void LevelUpBtnClick(){
-        if(mana >= reducingMana[playerLevel-1]){
+        if(mana >= reducingMana){
             LevelUp();
-            mana -= reducingMana[playerLevel-1];
+            mana -= reducingMana;
         }
         else{
             Debug.Log("Mana 부족!");
@@ -62,13 +52,12 @@ public class PlayerManager : MonoBehaviour
     }
 
     void LevelUp(){
-        playerExp += 4;
+        playerExp ++;
         if(playerExp>=expToLevelup[playerLevel-1]){
             playerExp %= expToLevelup[playerLevel-1];
             playerLevel++;
             Debug.Log("level up!");
         }
-        
     }
 
     public static int ReduceMana(int reducingMana){

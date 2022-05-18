@@ -21,8 +21,8 @@ public class UnitController : MonoBehaviour
     
     public Vector3 _nextMovePos;
 
-    public bool _onField;
-
+    private bool _onField;
+    public bool onField{ get => _onField; }
     Define.UnitState _state = Define.UnitState.Idle;
     public Define.UnitState state { get => _state; }
 
@@ -109,7 +109,7 @@ public class UnitController : MonoBehaviour
         else
             _chkSkillID = _status.normalSkillID;        
 
-        //Å¸°Ù °Ë»ö
+        //Å¸ï¿½ï¿½ ï¿½Ë»ï¿½
         _targetContainer = UnitManager.Instance.TargetFinder(go.GetInstanceID(), SkillManager.Instance.GetSkillData(_chkSkillID));
 
 
@@ -166,5 +166,26 @@ public class UnitController : MonoBehaviour
 
 
     public void SetUnitModelingObject(GameObject gameObject) { _unitModelingObject = gameObject; }
+
+    public bool CheckOnField(){
+        RaycastHit hit;
+        Vector3 vector3 = tr.position;
+        vector3.y+=0.1f;
+
+        if(Physics.Raycast(vector3, Vector3.down, out hit, 1.0f, 1<<7)){
+            Debug.Log(hit.transform.gameObject.name);
+            
+            if(hit.transform.gameObject.tag.Equals("Field")){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            return false;
+        
+        }
+    }
 
 }

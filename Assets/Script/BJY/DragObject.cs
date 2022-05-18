@@ -14,6 +14,8 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     float distance = 0;
     Vector3 _initialPos, _currentPos, _currentPosWorld;
     static Vector3 _storePos;
+    RaycastHit hit;
+    Ray ray;
 
      void Start()
     {
@@ -32,21 +34,33 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     }
 
     public void OnDrag(PointerEventData eventData){
-        _currentPos = eventData.position;
-        _currentPosWorld = Camera.main.ScreenToWorldPoint(new Vector3(_currentPos.x,_currentPos.y,distance));
-        
-        if(_currentPosWorld.y != 1.0f)
-            _currentPosWorld.y = 1.0f;
+        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if(Physics.Raycast(ray, out hit, 1000f, 1 << 30)){
+            _currentPosWorld =  hit.point;
+        }
+
+        if(_currentPosWorld.y != 0.0f)
+            _currentPosWorld.y = 0.0f;
         
         transform.position = _currentPosWorld;
     }
 
     public void OnEndDrag(PointerEventData eventData){
-        Debug.Log(_storePos);
-        Debug.Log(Camera.main.WorldToScreenPoint(_currentPosWorld));
-
-        _currentPosWorld.x = (float) Math.Round(_currentPosWorld.x);        
         _manaButton.GetComponent<Image>().sprite = _originImage;
+
+        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if(Physics.Raycast(ray, out hit, 1000f, 1 << 7)){
+            _currentPosWorld = hit.transform.position;
+            _currentPosWorld.y += 0.5f;
+            transform.position = _currentPosWorld;
+            Debug.Log(hit.transform.position);
+        }
+        else{
+            transform.position = _initialPos;            
+            Debug.Log("Nope!! - Cant Access"); 
+        }
+
 
         //object pos가 마나버튼 위일 때
         if(IsOnManaButton(Camera.main.WorldToScreenPoint(_currentPosWorld))){
@@ -60,11 +74,9 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             }
         }
         //object pos를 판 위에 놓을 때
-        else if(!MapManager.IsInChessBoard(_currentPosWorld)&&!MapManager.IsInWaitingBoard(_currentPosWorld)){
-            transform.position = _initialPos;
-            Debug.Log("Nope!! - Cant Access"); 
-        }
-        else if(MapManager.IsInChessBoard(_currentPosWorld)&&MapManager.IsInChessBoard(_initialPos)){
+        //else if(!MapManager.IsInChessBoard(_currentPosWorld)&&!MapManager.IsInWaitingBoard(_currentPosWorld)){
+        //}
+        /*else if(MapManager.IsInChessBoard(_currentPosWorld)&&MapManager.IsInChessBoard(_initialPos)){
             _currentPosWorld.z = (float) Math.Round(_currentPosWorld.z);
 
             if(_initialPos != _currentPosWorld){
@@ -120,7 +132,7 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             else{
                 transform.position = _initialPos;
             }
-        }
+        }*/
         
     }
 

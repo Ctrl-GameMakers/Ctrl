@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Ally
   - Enemy
+  - StoreCamera
+  - Field
+  - Queue
   layers:
   - Default
   - TransparentFX
@@ -13,8 +16,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Store
+  - Tile
   - 
   - 
   - 
@@ -37,7 +40,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - DragCheck
   - Environment
   m_SortingLayers:
   - name: Default

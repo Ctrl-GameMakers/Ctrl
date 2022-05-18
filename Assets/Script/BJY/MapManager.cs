@@ -8,19 +8,23 @@ public class MapManager : MonoBehaviour
     private static bool[] chessBoard = new bool[64];
     private static bool[] playerChessBoard = new bool[32];
     private static bool[] enemyChessBoard = new bool[32];
-    private static bool[] waitingBoard = new bool[9]{false, false, false, false, false, false, false, false, false};
+    private static bool[] waitingBoard = new bool[9];
     private static int waitingBoardCount = 0;
-    private const float startWaitingBoardPos = -5.5f, endWaitingBoardPos = 2.5f;
-    private const float startChessBoardPosX = -5.0f, startChessBoardPosZ = 7.0f, startPlayerChessBoardPosZ = 3.0f, endChessBoardPosX = 2.0f, endChessBoardPosZ = 0.0f;
+    private const float startWaitingBoardPos = -0.5f, endWaitingBoardPos = 7.5f;
+    private const float startChessBoardPosX = 0.0f, startChessBoardPosZ = 7.0f, startPlayerChessBoardPosZ = 3.0f, endChessBoardPosX = 7.0f, endChessBoardPosZ = 0.0f;
    
     public static void InitBoard(){
         for(int i=0;i<64;i++){
-                chessBoard[i] = false;
+            chessBoard[i] = false;
         }
 
         for(int i=0;i<4;i++){
-                enemyChessBoard[i] = false;
-                playerChessBoard[i] = false;
+            enemyChessBoard[i] = false;
+            playerChessBoard[i] = false;
+        }
+
+        for(int i=0;i<9;i++){
+            waitingBoard[i]=false;
         }
     }
 
