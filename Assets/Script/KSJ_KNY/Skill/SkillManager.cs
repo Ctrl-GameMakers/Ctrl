@@ -43,7 +43,7 @@ public class SkillManager : MonoBehaviour
 
     public void UseSkill(int skillID, int _casterInstanceID, int _targetInstanceID)
     {
-        Debug.Log($"{_casterInstanceID}가 {_targetInstanceID}에게 {skillID}를 사용함.");
+        //Debug.Log($"{_casterInstanceID}가 {_targetInstanceID}에게 {skillID}를 사용함.");
 
         switch (GetSkillData(skillID).skillCenterPoint)
         {

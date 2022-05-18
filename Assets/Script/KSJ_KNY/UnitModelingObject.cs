@@ -24,7 +24,10 @@ public class UnitModelingObject : MonoBehaviour
 
         if(GetComponentInParent<UnitController>() != null)
         {
-            GetComponentInParent<UnitController>().animator = GetComponent<Animator>();
+            if(GetComponent<Animator>() != null)
+            {
+                GetComponentInParent<UnitController>().SetAnimator(GetComponent<Animator>());
+            }
         }
     }
 

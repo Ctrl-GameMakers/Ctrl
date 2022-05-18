@@ -21,10 +21,14 @@ public struct UnitData
     private float _criticalMultiplier;
 
     private int _normalSkillID;
+    private string _normalSkillAnimation;
     private int _specialSkillID;
+    private string _specialSkillAnimation;
 
     private string _unitModelingObjectName;
     private GameObject _unitModelingObjectPrefab;
+    private string _moveAnimation;
+    private string _deathAnimation;
 
     public int id { get => _id; }
     public string nameKor { get => _nameKor; }
@@ -41,10 +45,14 @@ public struct UnitData
     public float criticalMultiplier { get => _criticalMultiplier; }
 
     public int normalSkillID { get => _normalSkillID; }
+    public string normalSkillAnimation { get => _normalSkillAnimation; }
     public int specialSkillID { get => _specialSkillID; }
+    public string specialSkillAnimation { get => _specialSkillAnimation; }
 
     public string unitModelingObjectName { get => _unitModelingObjectName; }
     public GameObject unitModelingObjectPrefab { get => _unitModelingObjectPrefab; }
+    public string moveAnimation { get => _moveAnimation; }
+    public string deathAnimation { get => _deathAnimation; }
 
 
 
@@ -65,10 +73,14 @@ public struct UnitData
         SetValue(ref _criticalMultiplier, _unitData["CriticalMultiplier"]);
 
         SetValue(ref _normalSkillID, _unitData["NormalSkillID"]);
+        _normalSkillAnimation = _unitData["NormalSkillAnimation"].ToString();
         SetValue(ref _specialSkillID, _unitData["SpecialSkillID"]);
+        _specialSkillAnimation = _unitData["SpecialSkillAnimation"].ToString();
 
         _unitModelingObjectName = _unitData["UnitVisualObjectPrefab"].ToString();
         SetValue(ref _unitModelingObjectPrefab, _unitData["UnitVisualObjectPrefab"]);
+        _moveAnimation = _unitData["MoveAnimation"].ToString();
+        _deathAnimation = _unitData["DeathAnimation"].ToString();
 
         return this;
     }

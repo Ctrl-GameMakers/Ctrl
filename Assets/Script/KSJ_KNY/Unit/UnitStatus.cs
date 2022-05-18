@@ -27,7 +27,9 @@ public class UnitStatus : MonoBehaviour
     [SerializeField] private float _criticalMultiplier;
 
     [SerializeField] private int _normalSkillID;
+    [SerializeField] private string _normalSkillAnimation;
     [SerializeField] private int _specialSkillID;
+    [SerializeField] private string _specialSkillAnimation;
 
     public int unitID { get => _unitID; }
     public float maxHP { get => _maxHP; }
@@ -44,14 +46,19 @@ public class UnitStatus : MonoBehaviour
     public float criticalMultiplier { get => _criticalMultiplier; }
 
     public int normalSkillID { get => _normalSkillID; }
+    public string normalSkillAnimation { get => _normalSkillAnimation; }
     public int specialSkillID { get => _specialSkillID; }
+    public string specialSkillAnimation { get => _specialSkillAnimation; }
 
     private UnitData _unitBaseData;
     [SerializeField] private GameObject _unitModelingObject;
+    [SerializeField] private string _moveAnimation;
+    [SerializeField] private string _deathAnimation;
 
     private bool _settingComplete;
     public bool settingComplete { get => _settingComplete; }
-
+    public string moveAnimation { get => _moveAnimation; }
+    public string deathAnimation { get => _deathAnimation; }
 
     void Awake()
     {
@@ -139,10 +146,13 @@ public class UnitStatus : MonoBehaviour
             _criticalMultiplier = _unitBaseData.criticalMultiplier;
 
             _normalSkillID = _unitBaseData.normalSkillID;
+            _normalSkillAnimation = _unitBaseData.normalSkillAnimation;
             _specialSkillID = _unitBaseData.specialSkillID;
+            _specialSkillAnimation = _unitBaseData.specialSkillAnimation;
 
             _unitController.SetUnitModelingObject(UnitManager.Instance.CallUnitModelingObject(unitID, GetComponent<Transform>()));
-            
+            _moveAnimation = _unitBaseData.moveAnimation;
+            _deathAnimation = _unitBaseData.deathAnimation;
 
             _settingComplete = true;
         }      

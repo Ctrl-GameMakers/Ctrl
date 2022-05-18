@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(UnitAnimationController))]
 public class UnitAction : MonoBehaviour
 {
     Transform tr;
     GameObject go;
 
     UnitStatus unitStatus;
+    UnitAnimationController _animationController;
 
     float _moveSpeed = 2.0f;
     float _rotateSpeed = 20.0f;
@@ -16,6 +18,7 @@ public class UnitAction : MonoBehaviour
 
     Vector3 _goalPos;
     int _targetInstanceID;
+
 
     public IEnumerator _action;
     public IEnumerator _lookAt;
@@ -29,6 +32,7 @@ public class UnitAction : MonoBehaviour
         go = gameObject;
 
         unitStatus = GetComponent<UnitStatus>();
+        _animationController = GetComponent<UnitAnimationController>();
     }
 
     public void Move(Vector3 goalPos)
@@ -51,7 +55,7 @@ public class UnitAction : MonoBehaviour
 
         //tr.LookAt(goalPos);
 
-
+        _animationController.Play(unitStatus.moveAnimation);
         StartCoroutine(_action);        
     }
 
@@ -67,8 +71,7 @@ public class UnitAction : MonoBehaviour
             _lookAt = FollowTarget(UnitManager.Instance.GetUnitPosition(targetInstanceID));
             StartCoroutine(_lookAt);
         }
-
-
+        
         if (_action != null)   
         {
             StopCoroutine(_action);
@@ -83,20 +86,32 @@ public class UnitAction : MonoBehaviour
         if (skillID.Equals(unitStatus.specialSkillID))
         {
             unitStatus.ResetNowMP(0.0f);
+            _animationController.Play(unitStatus.specialSkillAnimation, SkillManager.Instance.GetSkillData(skillID).judgmentTime + SkillManager.Instance.GetSkillData(skillID).afterDelay);
+        }
+        else
+        {
+            _animationController.Play(unitStatus.normalSkillAnimation, SkillManager.Instance.GetSkillData(skillID).judgmentTime + SkillManager.Instance.GetSkillData(skillID).afterDelay);
         }
         StartCoroutine (_action);
     }
     
-
-
-
+    public void Death()
+    {
+        if (_action != null)
+        {
+            StopCoroutine(_action);
+            _action = null;
+        }
+        _animationController.Play(unitStatus.deathAnimation);
+    }
+       
     IEnumerator FollowTarget(Vector3 point)
     {
         dir = Quaternion.LookRotation(point - tr.position);
 
         while (true)
         {
-            tr.rotation = Quaternion.Lerp(tr.rotation, dir, Time.deltaTime * 20.0f);
+            tr.rotation = Quaternion.Lerp(tr.rotation, dir, Time.deltaTime * _rotateSpeed);
 
             yield return null;
 
@@ -106,16 +121,13 @@ public class UnitAction : MonoBehaviour
             }
         }
     }
-
-
-
+       
 
     IEnumerator AttackAction(int skillID)
     {
         _onAction = true;
 
         SkillManager.Instance.UseSkill(skillID, go.GetInstanceID(), _targetInstanceID);
-
         yield return new WaitForSeconds(SkillManager.Instance.GetSkillData(skillID).judgmentTime + SkillManager.Instance.GetSkillData(skillID).afterDelay);
 
         _onAction = false;
@@ -133,6 +145,7 @@ public class UnitAction : MonoBehaviour
 
             if (transform.position == _goalPos)
             {
+                _animationController.Play("Idle");
                 yield return new WaitForSeconds(0.5f);
                 break;
             }

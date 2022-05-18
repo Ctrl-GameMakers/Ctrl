@@ -21,7 +21,7 @@ public class TileManager : MonoBehaviour
 
     Dictionary<int, IntVector2> unitPositionDic = new Dictionary<int, IntVector2>();
 
-    private int _boardSize = 6;
+    private int _boardSize = 8;
    
     public int boardSize { get => _boardSize;}
 

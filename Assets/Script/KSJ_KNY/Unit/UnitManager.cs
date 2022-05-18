@@ -201,6 +201,11 @@ public class UnitManager : MonoBehaviour
             }
         }
 
+        foreach (KeyValuePair<int, UnitInformation> unitsPair in battleUnitDic)
+        {
+            unitsPair.Value.unitController.ActiveBattle(true);
+        }
+
         _isBattleMode = true;
     }
 

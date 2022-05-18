@@ -14,6 +14,7 @@ public struct IntVector2
 [RequireComponent(typeof(UnitStatus))]
 [RequireComponent(typeof(UnitAction))]
 [RequireComponent(typeof(UnitFeedback))]
+[RequireComponent(typeof(UnitAnimationController))]
 public class UnitController : MonoBehaviour
 {
     Transform tr;
@@ -21,8 +22,8 @@ public class UnitController : MonoBehaviour
     
     public Vector3 _nextMovePos;
 
-    private bool _onField;
-    public bool onField{ get => _onField; }
+    private bool _isBattle;
+    public bool isBattle { get => _isBattle; }
     Define.UnitState _state = Define.UnitState.Idle;
     public Define.UnitState state { get => _state; }
 
@@ -38,22 +39,49 @@ public class UnitController : MonoBehaviour
 
     UnitAction _action;
     UnitStatus _status;
+    UnitAnimationController _animationController;
 
     public Animator animator;
 
-    void Start()
+    IEnumerator play;
+
+    RaycastHit hit;
+
+    Vector3 tempVector3;
+
+    private void Awake()
     {
         tr = GetComponent<Transform>();
         go = gameObject;
         _action = GetComponent<UnitAction>();
         _status = GetComponent<UnitStatus>();
-
+        _animationController = GetComponent<UnitAnimationController>();
+    }
+    void Start()
+    {
         UnitManager.Instance.AddUnitInformation(this);
     }
 
-    void Update()
+    public void ActiveBattle(bool value)
     {
-        if (UnitManager.Instance.isBattleMode)
+        if(play != null)
+        {
+            StopCoroutine(play);
+            play = null;
+        }
+
+        if (value)
+        {
+            play = Play();
+            StartCoroutine(play);
+        }
+
+        _isBattle = value;
+    }
+
+    IEnumerator Play()
+    {
+        while(true)
         {
             if (!_state.Equals(Define.UnitState.Die))
             {
@@ -64,7 +92,6 @@ public class UnitController : MonoBehaviour
                     {
                         case Define.UnitState.Idle:
                             {
-
                             }
                             break;
                         case Define.UnitState.Moving:
@@ -82,9 +109,11 @@ public class UnitController : MonoBehaviour
                     }
                 }
             }
-        }
-    }
 
+            yield return null;
+        }
+
+    }    
 
     #region Unit Action
     void MoveAction()
@@ -157,35 +186,32 @@ public class UnitController : MonoBehaviour
         _state = Define.UnitState.Die;
         UnitManager.Instance.SetUnitDeath(go.GetInstanceID());
 
+        _action.Death();
+
+        /*
         _unitModelingObject.GetComponent<UnitModelingObject>().ReturnUnitObject();
 
         _unitModelingObject = null;
 
-        gameObject.SetActive(false);
+        gameObject.SetActive(false);*/
     }
 
 
     public void SetUnitModelingObject(GameObject gameObject) { _unitModelingObject = gameObject; }
 
-    public bool CheckOnField(){
-        RaycastHit hit;
-        Vector3 vector3 = tr.position;
-        vector3.y+=0.1f;
+    public bool CheckOnField()
+    {
+        tempVector3 = tr.position;
+        tempVector3.y += 0.1f;
 
-        if(Physics.Raycast(vector3, Vector3.down, out hit, 1.0f, 1<<7)){
-            Debug.Log(hit.transform.gameObject.name);
-            
-            if(hit.transform.gameObject.tag.Equals("Field")){
-                return true;
-            }
-            else{
-                return false;
-            }
-        }
-        else{
+        if(Physics.Raycast(tempVector3, Vector3.down, out hit, 1.0f, 1<<7))
+            return hit.transform.gameObject.tag.Equals("Field");
+        else
             return false;
-        
-        }
     }
 
+    public void SetAnimator(Animator animator)
+    {
+        _animationController.SetAnimator(animator);
+    }
 }
