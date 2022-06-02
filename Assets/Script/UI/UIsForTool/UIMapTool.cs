@@ -11,6 +11,8 @@ public class UIMapTool : UIBase
     private Material _current_material;
     private int _material_index;
 
+    private Item_Cube _current_select_cube;
+
     public void Awake()
     {
         _material_index = -1;
@@ -53,5 +55,11 @@ public class UIMapTool : UIBase
             _material_index = 0;
         }
         RenderSettings.skybox = _materials[_material_index];
+    }
+
+    public void select_cube(Item_Cube item_Cube)
+    {
+        _current_select_cube = item_Cube;
+        Debug.LogError(_current_select_cube.img_cube.color);
     }
 }

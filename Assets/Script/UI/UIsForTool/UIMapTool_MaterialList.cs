@@ -19,6 +19,9 @@ public class UIMapTool_MaterialList : UIBase
     public RectTransform[] rt_root_tap;
     public RectTransform rt_tap_select;
 
+    private Item_Cube _current_cube;
+    public Item_Cube getCurrentCube => _current_cube;
+
     public void Awake()
     {
         _materials = Resources.LoadAll<Material>("BJYPrefab/Materials");
@@ -96,9 +99,29 @@ public class UIMapTool_MaterialList : UIBase
         rt_tap_select.localPosition = rt_root_tap[_current_select_menu].localPosition;
     }
 
+    public void select_cube(Item_Cube item_Cube)
+    {
+        _current_cube = item_Cube;
+        for (int i = 0; i < _list_item_cube.Count; i++)
+        {
+            _list_item_cube[i].refresh_select(false);
+        }
+
+        _current_cube.refresh_select(!_current_cube.img_select.gameObject.activeSelf);
+    }
+
     public void onBtnSelectMaterial()
     {
-
+        if (null != _current_cube)
+        {
+            UIManager.getinstance<UIMapTool>().select_cube(_current_cube);
+            _current_cube = null;
+            onBtnClose();
+        }
+        else
+        {
+            Debug.LogError("select cube is null");
+        }
     }
 
     public void onBtnClose()

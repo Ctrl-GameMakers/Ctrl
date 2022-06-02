@@ -26,6 +26,8 @@ public class MainControlMapTool : MonoBehaviour
         UIManager.hideAllUI();
 
         _init();
+
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void Update()
@@ -33,10 +35,20 @@ public class MainControlMapTool : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             _camera_move = !_camera_move;
-        }
 
-        if (_camera_move)
+            if (_camera_move)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.None;
+            }
+        }    
+
+        if (_camera_move && !UIManager.activeSelf<UIMapTool_MaterialList>())
         {
+            
             _xmove += Input.GetAxis("Mouse X");
             _ymove -= Input.GetAxis("Mouse Y");
             main_camera.transform.rotation = Quaternion.Euler(_ymove, _xmove, 0);
