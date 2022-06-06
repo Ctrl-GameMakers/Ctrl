@@ -12,11 +12,13 @@ public class UIMapTool : UIBase
     private int _material_index;
 
     private Item_Cube _current_select_cube;
+    public Item_Cube source_cube;
 
     public void Awake()
     {
         _material_index = -1;
         _materials = Resources.LoadAll<Material>("SkyBox");
+        source_cube.gameObject.SetActive(false);
     }
 
     public override void show()
@@ -33,7 +35,8 @@ public class UIMapTool : UIBase
 
     public void Update()
     {
-
+        if (source_cube.gameObject.activeSelf)
+            source_cube.transform.localPosition = Input.mousePosition;
     }
 
     public void onBtnShowMenu()
@@ -59,7 +62,7 @@ public class UIMapTool : UIBase
 
     public void select_cube(Item_Cube item_Cube)
     {
-        _current_select_cube = item_Cube;
-        Debug.LogError(_current_select_cube.img_cube.color);
+        source_cube.gameObject.SetActive(true);
+        source_cube.setup(item_Cube.getMaterial, placement : true);
     }
 }

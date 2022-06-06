@@ -85,6 +85,11 @@ public class MainControlMapTool : MonoBehaviour
                 main_camera.transform.position += dir * 10f * Time.deltaTime;
             }
 
+            if (main_camera.transform.position.y < 1)
+            {
+                main_camera.transform.position = new Vector3(main_camera.transform.position.x, 1, main_camera.transform.position.z);
+            }
+
             // if (Input.GetButtonDown("Fire1"))
             // {
             //     Vector3 mousePos = Input.mousePosition;
