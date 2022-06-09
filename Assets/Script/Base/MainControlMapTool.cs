@@ -39,10 +39,13 @@ public class MainControlMapTool : MonoBehaviour
             if (_camera_move)
             {
                 Cursor.lockState = CursorLockMode.Locked;
+                UIManager.getinstance<UIMapTool>().cube_mesh.gameObject.SetActive(false);
             }
             else
             {
                 Cursor.lockState = CursorLockMode.None;
+                if (null != UIManager.getinstance<UIMapTool>().getSelectCube)
+                    UIManager.getinstance<UIMapTool>().cube_mesh.gameObject.SetActive(true);
             }
         }    
 

@@ -830,6 +830,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIMapTool_MaterialList
       objectReference: {fileID: 0}
+    - target: {fileID: 8230917421199242692, guid: 7225938322bbbd84da1b16a779fd2058,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8839038085573420136, guid: 7225938322bbbd84da1b16a779fd2058,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7225938322bbbd84da1b16a779fd2058, type: 3}
 --- !u!1001 &4732190224308488221
@@ -839,11 +849,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2100140495}
     m_Modifications:
-    - target: {fileID: 1031146823735417387, guid: 22e33a1a09e9cb243b5c4f75d674af52,
+    - target: {fileID: 4732190224376383821, guid: 22e33a1a09e9cb243b5c4f75d674af52,
         type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
+      propertyPath: MainCamera
+      value: 
+      objectReference: {fileID: 8721068883458391356}
     - target: {fileID: 4732190224376383826, guid: 22e33a1a09e9cb243b5c4f75d674af52,
         type: 3}
       propertyPath: m_Pivot.x

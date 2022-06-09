@@ -12,13 +12,17 @@ public class UIMapTool : UIBase
     private int _material_index;
 
     private Item_Cube _current_select_cube;
-    public Item_Cube source_cube;
+    public Item_Cube getSelectCube => _current_select_cube;
+    public MeshRenderer cube_mesh;
+
+    public float posZ;
+
+    public Camera MainCamera;
 
     public void Awake()
     {
         _material_index = -1;
         _materials = Resources.LoadAll<Material>("SkyBox");
-        source_cube.gameObject.SetActive(false);
     }
 
     public override void show()
@@ -31,12 +35,21 @@ public class UIMapTool : UIBase
     private void _setup()
     {
         tr_popup_menus.gameObject.SetActive(false);
+        cube_mesh.gameObject.SetActive(false);
     }
 
     public void Update()
     {
-        if (source_cube.gameObject.activeSelf)
-            source_cube.transform.localPosition = Input.mousePosition;
+        if (cube_mesh.gameObject.activeSelf)
+        {
+            Vector3 p = MainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -200f));
+
+
+            Vector3 vec3 = Input.mousePosition;
+            Vector3 transpos = new Vector3(Camera.main.ScreenToWorldPoint(vec3).x, Camera.main.ScreenToWorldPoint(vec3).y, (Camera.main.ScreenToWorldPoint(vec3).z + posZ));
+            
+            cube_mesh.transform.position = p;
+        }
     }
 
     public void onBtnShowMenu()
@@ -48,6 +61,15 @@ public class UIMapTool : UIBase
     public void onBtnCreateCube()
     {
         UIManager.getinstance<UIMapTool_MaterialList>().show();
+        _current_select_cube = null;
+        cube_mesh.gameObject.SetActive(false);
+    }
+
+    public void select_cube(Item_Cube item_Cube)
+    {
+        _current_select_cube = item_Cube;
+        cube_mesh.gameObject.SetActive(true);
+        cube_mesh.material = item_Cube.getMaterial;
     }
 
     public void onBtnChangeSkyBox()
@@ -58,11 +80,5 @@ public class UIMapTool : UIBase
             _material_index = 0;
         }
         RenderSettings.skybox = _materials[_material_index];
-    }
-
-    public void select_cube(Item_Cube item_Cube)
-    {
-        source_cube.gameObject.SetActive(true);
-        source_cube.setup(item_Cube.getMaterial, placement : true);
     }
 }

@@ -10,6 +10,7 @@ public class Item_Cube : MonoBehaviour
     private Material _material;
     public Material getMaterial => _material;
     private bool _placement = false;
+    public bool getPlacemet => _placement;
     public Button btn_select;
 
     public void setup(Material material, bool placement = false)
@@ -18,7 +19,6 @@ public class Item_Cube : MonoBehaviour
         _placement = placement;
         if (_placement)
         {
-            img_cube.color = new Color(material.color.r, material.color.g, material.color.b, 0.7f);
             btn_select.enabled = false;
         }
 
