@@ -60,6 +60,10 @@ namespace AutoBattles
         //how much gold the player will start with
         public int StartingGold { get => _startingGold; set => _startingGold = value; }
 
+        protected float _prepare_time;
+        protected float _prepare_max_time;
+        public float PrepareTime { get => _prepare_time; set => _prepare_time = value; }
+
         //if the round is currently in the process of ending
         protected bool RoundIsEnding { get => _roundIsEnding; set => _roundIsEnding = value; }
 
@@ -319,13 +323,35 @@ namespace AutoBattles
         {
             //let all pawns from that round know that combat has finished
             //this will also reset synergy bonuses for player pawns
-            ArmyManagerScript.EndCombatForAllActivePawns();                    
+            _prepare_time = 15f;
+            _prepare_max_time = 15f;
+            UserInterfaceManager.Instance.img_gage.fillAmount = 1f;
+
+            ArmyManagerScript.EndCombatForAllActivePawns();                
 
             //start the timer to decide a winner
             StartCoroutine(CountdownToDecideWinner());
 
             //start timer for rewards and board reset
             StartCoroutine(ResetBoardAndGiveRewards());
+        }
+
+        public void Update()
+        {
+            if (!InCombat)
+            {
+                _prepare_time -= Time.deltaTime;
+                UserInterfaceManager.Instance.txt_timer.text = _prepare_time.ToString("N0");
+                UserInterfaceManager.Instance.img_gage.fillAmount = (float)_prepare_time / (float)_prepare_max_time;
+            }
+
+            if (_prepare_time <= 0f)
+            {
+                _prepare_time = 15f;
+                UserInterfaceManager.Instance.txt_timer.text = _prepare_time.ToString("N0");
+                UserInterfaceManager.Instance.img_gage.fillAmount = (float)_prepare_time / (float)_prepare_max_time;
+                BeginRound();
+            }
         }
 
         //this will give a little leeway at the end of the round in case both armies killed
