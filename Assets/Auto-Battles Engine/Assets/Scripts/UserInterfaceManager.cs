@@ -75,6 +75,12 @@ namespace AutoBattles
         [Tooltip("Contains the references to all ShopSlot scripts for our active shop slots at runtime.")]
         private List<ShopSlot> _shopSlots = new List<ShopSlot>();
 
+        [Header("Timer")]
+        [SerializeField]
+        private GameObject  _timerPrefab;
+        public Text         txt_timer;
+        public Image        img_gage;
+
         [Header("Experience Button")]
         [SerializeField]
         private Text _currentLevelText;
