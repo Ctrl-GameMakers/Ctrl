@@ -39,7 +39,7 @@ namespace AutoBattles
         public void Open()
         {
             //set it to its 'active' position
-            menuTransform.position = activePosition.position;
+            //menuTransform.position = activePosition.position;
 
             //set it to active
             isActive = true;
@@ -48,7 +48,7 @@ namespace AutoBattles
         public void Close()
         {
             //set it to its 'hidden' position
-            menuTransform.position = hiddenPosition.position;
+            //menuTransform.position = hiddenPosition.position;
 
             //set it to inactive
             isActive = false;
@@ -240,23 +240,23 @@ namespace AutoBattles
                     "Please set this reference in the inspector before entering playmode.");
             }
 
-            if (!ShopMenu.menuTransform)
-            {
-                Debug.LogError("No menu transform reference set for the ShopMenu menuobject in the UserInterfaceManager script located on the" + gameObject.name + " gamobject." +
-                    "Please set this reference in the inspector before entering playmode.");
-            }
+            // if (!ShopMenu.menuTransform)
+            // {
+            //     Debug.LogError("No menu transform reference set for the ShopMenu menuobject in the UserInterfaceManager script located on the" + gameObject.name + " gamobject." +
+            //         "Please set this reference in the inspector before entering playmode.");
+            // }
 
-            if (!ShopMenu.hiddenPosition)
-            {
-                Debug.LogError("No hidden position reference set for the ShopMenu menuobject in the UserInterfaceManager script located on the" + gameObject.name + " gamobject." +
-                    "Please set this reference in the inspector before entering playmode.");
-            }
+            // if (!ShopMenu.hiddenPosition)
+            // {
+            //     Debug.LogError("No hidden position reference set for the ShopMenu menuobject in the UserInterfaceManager script located on the" + gameObject.name + " gamobject." +
+            //         "Please set this reference in the inspector before entering playmode.");
+            // }
 
-            if (!ShopMenu.activePosition)
-            {
-                Debug.LogError("No active position reference set for the ShopMenu menuobject in the UserInterfaceManager script located on the" + gameObject.name + " gamobject." +
-                    "Please set this reference in the inspector before entering playmode.");
-            }
+            // if (!ShopMenu.activePosition)
+            // {
+            //     Debug.LogError("No active position reference set for the ShopMenu menuobject in the UserInterfaceManager script located on the" + gameObject.name + " gamobject." +
+            //         "Please set this reference in the inspector before entering playmode.");
+            // }
 
             if (!CurrentLevelText)
             {
