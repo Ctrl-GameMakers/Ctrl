@@ -279,17 +279,17 @@ namespace AutoBattles
                     "Please set this reference in the inspector before entering playmode.");
             }
 
-            if (!TrashPanel.hiddenPosition)
-            {
-                Debug.LogError("No hidden position reference set for the TrashPanel menuobject in the UserInterfaceManager script located on the" + gameObject.name + " gamobject." +
-                    "Please set this reference in the inspector before entering playmode.");
-            }
+            // if (!TrashPanel.hiddenPosition)
+            // {
+            //     Debug.LogError("No hidden position reference set for the TrashPanel menuobject in the UserInterfaceManager script located on the" + gameObject.name + " gamobject." +
+            //         "Please set this reference in the inspector before entering playmode.");
+            // }
 
-            if (!TrashPanel.activePosition)
-            {
-                Debug.LogError("No active position reference set for the TrashPanel menuobject in the UserInterfaceManager script located on the" + gameObject.name + " gamobject." +
-                    "Please set this reference in the inspector before entering playmode.");
-            }
+            // if (!TrashPanel.activePosition)
+            // {
+            //     Debug.LogError("No active position reference set for the TrashPanel menuobject in the UserInterfaceManager script located on the" + gameObject.name + " gamobject." +
+            //         "Please set this reference in the inspector before entering playmode.");
+            // }
 
             if (!StatsPanel.menuTransform)
             {
@@ -333,17 +333,17 @@ namespace AutoBattles
                     "Please set this reference in the inspector before entering playmode.");
             }
 
-            if (!ArmyCountDisplay.hiddenPosition)
-            {
-                Debug.LogError("No hidden position reference set for the ArmyCountDisplay menuobject in the UserInterfaceManager script located on the" + gameObject.name + " gamobject." +
-                    "Please set this reference in the inspector before entering playmode.");
-            }
+            // if (!ArmyCountDisplay.hiddenPosition)
+            // {
+            //     Debug.LogError("No hidden position reference set for the ArmyCountDisplay menuobject in the UserInterfaceManager script located on the" + gameObject.name + " gamobject." +
+            //         "Please set this reference in the inspector before entering playmode.");
+            // }
 
-            if (!ArmyCountDisplay.activePosition)
-            {
-                Debug.LogError("No active position reference set for the ArmyCountDisplay menuobject in the UserInterfaceManager script located on the" + gameObject.name + " gamobject." +
-                    "Please set this reference in the inspector before entering playmode.");
-            }
+            // if (!ArmyCountDisplay.activePosition)
+            // {
+            //     Debug.LogError("No active position reference set for the ArmyCountDisplay menuobject in the UserInterfaceManager script located on the" + gameObject.name + " gamobject." +
+            //         "Please set this reference in the inspector before entering playmode.");
+            // }
 
             if (!ArmyCountText)
             {
