@@ -190,7 +190,6 @@ MonoBehaviour:
     hiddenPosition: {fileID: 0}
   _shopSlotCount: 5
   _shopSlots: []
-  _timerPrefab: {fileID: 0}
   txt_timer: {fileID: 0}
   img_gage: {fileID: 0}
   _currentLevelText: {fileID: 0}

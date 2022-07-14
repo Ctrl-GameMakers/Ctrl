@@ -76,8 +76,6 @@ namespace AutoBattles
         private List<ShopSlot> _shopSlots = new List<ShopSlot>();
 
         [Header("Timer")]
-        [SerializeField]
-        private GameObject  _timerPrefab;
         public Text         txt_timer;
         public Image        img_gage;
 
