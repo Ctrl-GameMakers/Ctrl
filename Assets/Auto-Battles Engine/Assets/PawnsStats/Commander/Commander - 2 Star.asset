@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Commander
   icon: {fileID: 21300000, guid: 58c0d050fa8b3c74bbadbf9ab8e5a024, type: 3}
-  pawn: {fileID: 2341667580664231145, guid: 4dc5df3010b070448b2bd88519f41fce, type: 3}
+  pawn: {fileID: 120804, guid: ce64ed078e38c8a468c45a05da893603, type: 3}
   starRating: 1
   pawnQuality: 4
   upgradedPawn: {fileID: 11400000, guid: 6678d2b2932e04247870e719842bae82, type: 2}

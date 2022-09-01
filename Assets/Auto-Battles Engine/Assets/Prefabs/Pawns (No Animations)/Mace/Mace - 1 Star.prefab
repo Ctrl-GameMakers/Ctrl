@@ -33,6 +33,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -37.054356, y: 4.3326683, z: 23.743277}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3130741962236537812}
   m_Father: {fileID: 0}
@@ -152,9 +153,18 @@ MonoBehaviour:
   _manaPerAttack: 0
   _moveSpeed: 0
   _health: 0
+  _maxHealth: 0
   _mana: 0
   _armor: 0
   _physicalDmgReduction: 0
+  _increasedAttackSpeed: 0
+  _bonusArmor: 0
+  _bonusDamage: 0
+  _bonusHealth: 0
+  _synergy_IncreasedAttackSpeed: 0
+  _synergy_BonusArmor: 0
+  _synergy_BonusDamage: 0
+  _synergy_BonusHealth: 0
 --- !u!1 &3130741962236537811
 GameObject:
   m_ObjectHideFlags: 0
@@ -183,6 +193,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3130741962207041703}
   m_RootOrder: 0
@@ -206,9 +217,12 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -233,3 +247,4 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Mace
   icon: {fileID: 21300000, guid: 9dca2c2dda55c1148a0bedc6db8e4b54, type: 3}
-  pawn: {fileID: 190374688408880835, guid: 99ffc5a29321de644bcbce60d8d4a3dc, type: 3}
+  pawn: {fileID: 100136, guid: 92a3fb5a7beb7e143af04832db4e9416, type: 3}
   starRating: 1
   pawnQuality: 0
   upgradedPawn: {fileID: 11400000, guid: 77eb1137c051e3647835c330deac7ac9, type: 2}
