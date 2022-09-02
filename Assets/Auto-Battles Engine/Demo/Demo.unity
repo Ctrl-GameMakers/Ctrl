@@ -561,6 +561,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Map
       objectReference: {fileID: 0}
+    - target: {fileID: 4320817141874203331, guid: a80f12b35e197d04eac2894718a0a2c5,
+        type: 3}
+      propertyPath: m_Name
+      value: Map_Scene
+      objectReference: {fileID: 0}
     - target: {fileID: 7346841983124243941, guid: a80f12b35e197d04eac2894718a0a2c5,
         type: 3}
       propertyPath: m_Pivot.x
