@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Swordsman - 2 Star
   m_EditorClassIdentifier: 
   name: Swordsman
-  icon: {fileID: 21300000, guid: 944d3d47ba3060b4b89181554151cf5f, type: 3}
-  pawn: {fileID: 3077562334488732511, guid: 1932c76c68faaec46b5e23539a15c0a0, type: 3}
+  icon: {fileID: 21300000, guid: 206690c814bae574f8492e791be74453, type: 3}
+  pawn: {fileID: 100136, guid: 3e48dbc6b8d93f14686dcd8ab852d56b, type: 3}
   starRating: 1
   pawnQuality: 3
   upgradedPawn: {fileID: 11400000, guid: 10955b76ef46e464fbb0240ddff2c62f, type: 2}

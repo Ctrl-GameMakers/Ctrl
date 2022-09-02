@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Crossbow - 1 Star
   m_EditorClassIdentifier: 
   name: Crossbow
-  icon: {fileID: 21300000, guid: a7ba45f2f4c34aa4f88c2c28e51a68a4, type: 3}
-  pawn: {fileID: 8913214788031115676, guid: eeb902f64367eae4c8973f2e2ab50ae3, type: 3}
+  icon: {fileID: 21300000, guid: 6adb6057dc4040c419954f677fed772d, type: 3}
+  pawn: {fileID: 100000, guid: a4d5f2ceda8ff634d8a4f3db76a11b55, type: 3}
   starRating: 0
   pawnQuality: 1
   upgradedPawn: {fileID: 11400000, guid: 7df3a603b280d704abc7d2b2bc970b5f, type: 2}

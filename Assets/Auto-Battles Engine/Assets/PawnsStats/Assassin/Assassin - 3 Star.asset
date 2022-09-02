@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Assassin - 3 Star
   m_EditorClassIdentifier: 
   name: Assassin
-  icon: {fileID: 21300000, guid: e47df5c42abbb254a81228a49bc1ea6b, type: 3}
-  pawn: {fileID: 486962601329800358, guid: a04d1cffccc23414eb4b0a41789fb5a2, type: 3}
+  icon: {fileID: 21300000, guid: aa513910af9bf8f4ebd692f8dd743ae2, type: 3}
+  pawn: {fileID: 130114, guid: ff3d992f8c229fe46850c42c2fef841f, type: 3}
   starRating: 2
   pawnQuality: 2
   upgradedPawn: {fileID: 0}

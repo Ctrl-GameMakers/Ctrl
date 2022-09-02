@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Linda - 1 Star
   m_EditorClassIdentifier: 
   name: Linda
-  icon: {fileID: 21300000, guid: a7a0cf4936b99254794984f552bf7e56, type: 3}
-  pawn: {fileID: 4296732128391809809, guid: 57c8355f4be83aa48905ef4d4a89aaa9, type: 3}
+  icon: {fileID: 21300000, guid: 679a75374c1d8344896efba6c2b778d4, type: 3}
+  pawn: {fileID: 100078, guid: 7bc9cee3ecd81964ab4bcede5ffcba0e, type: 3}
   starRating: 0
   pawnQuality: 2
   upgradedPawn: {fileID: 11400000, guid: b4e5b443eee3d554398f3f4692eb4140, type: 2}

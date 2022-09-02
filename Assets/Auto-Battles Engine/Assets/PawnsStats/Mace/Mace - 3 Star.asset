@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Mace - 3 Star
   m_EditorClassIdentifier: 
   name: Mace
-  icon: {fileID: 21300000, guid: 9dca2c2dda55c1148a0bedc6db8e4b54, type: 3}
+  icon: {fileID: 21300000, guid: d2e6de698380065419c9b197996ac8f0, type: 3}
   pawn: {fileID: 100136, guid: 260ee37b261e3eb44a9a8234287aade6, type: 3}
   starRating: 2
   pawnQuality: 0

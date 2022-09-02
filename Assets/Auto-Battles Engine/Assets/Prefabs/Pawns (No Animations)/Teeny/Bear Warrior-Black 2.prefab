@@ -5586,15 +5586,15 @@ GameObject:
   m_Component:
   - component: {fileID: 460164}
   - component: {fileID: 9587328}
-  - component: {fileID: -8409253220268813636}
-  - component: {fileID: 8232111950108095295}
-  - component: {fileID: 2922120512859462640}
-  - component: {fileID: -6580043717110304848}
-  - component: {fileID: -6810218464023412391}
-  - component: {fileID: -6324826884573627358}
-  - component: {fileID: 1856063090903325977}
+  - component: {fileID: -3593320375907266572}
+  - component: {fileID: -1199007091937790179}
+  - component: {fileID: -2125676359738930954}
+  - component: {fileID: -7302560305148501806}
+  - component: {fileID: 8408213828250380560}
+  - component: {fileID: 2141533908201088335}
+  - component: {fileID: 3721757762797764433}
   m_Layer: 0
-  m_Name: Bear Warrior-Black - 2Star
+  m_Name: Bear Warrior-Black 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5651,7 +5651,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &-8409253220268813636
+--- !u!114 &-3593320375907266572
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5664,7 +5664,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _target: {fileID: 0}
---- !u!114 &8232111950108095295
+--- !u!114 &-1199007091937790179
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5681,7 +5681,7 @@ MonoBehaviour:
   _attacking: 0
   _readyToAttack: 0
   _projectileSpawnTransform: {fileID: 0}
---- !u!114 &2922120512859462640
+--- !u!114 &-2125676359738930954
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5698,7 +5698,7 @@ MonoBehaviour:
   _currentTile: {fileID: 0}
   _gridPosition: {x: 0, y: 0}
   _desiredPosition: {x: 0, y: 0, z: 0}
---- !u!114 &-6580043717110304848
+--- !u!114 &-7302560305148501806
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5714,7 +5714,7 @@ MonoBehaviour:
   _isPlayer: 0
   _inCombat: 0
   _goldWorth: 0
---- !u!114 &-6810218464023412391
+--- !u!114 &8408213828250380560
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5727,7 +5727,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tileScript: {fileID: 0}
---- !u!114 &-6324826884573627358
+--- !u!114 &2141533908201088335
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5741,7 +5741,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _currentHealth: 0
   _healthBarOffsetZ: 0
---- !u!114 &1856063090903325977
+--- !u!114 &3721757762797764433
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5753,7 +5753,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9aa48726aa078184f8c40054f6751a64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stats: {fileID: 11400000, guid: 6ac8e0d316127e14798b4986a077c250, type: 2}
+  _stats: {fileID: 11400000, guid: 62b0a5d3c868f004d84cd111fd84e8ad, type: 2}
   _minAttackDmg: 0
   _maxAttackDmg: 0
   _dps: 0

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Teeny - 2 Star
   m_EditorClassIdentifier: 
   name: Teeny
-  icon: {fileID: 21300000, guid: 79039cb5562d2604e88e7744aff078a4, type: 3}
-  pawn: {fileID: 2756429558732218908, guid: d901f2f905034544dafc9f597774b7eb, type: 3}
+  icon: {fileID: 21300000, guid: 7659c357428de6544a64564e20602036, type: 3}
+  pawn: {fileID: 120804, guid: 8c74824c39412274f83e235dc7113e51, type: 3}
   starRating: 1
   pawnQuality: 0
   upgradedPawn: {fileID: 11400000, guid: e53534422435e944b9fe2e8cf48954e0, type: 2}

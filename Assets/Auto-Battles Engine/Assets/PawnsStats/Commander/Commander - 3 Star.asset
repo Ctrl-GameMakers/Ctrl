@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Commander - 3 Star
   m_EditorClassIdentifier: 
   name: Commander
-  icon: {fileID: 21300000, guid: 58c0d050fa8b3c74bbadbf9ab8e5a024, type: 3}
-  pawn: {fileID: 120804, guid: 50d8766e1bde91a40bdc464fa21b8d09, type: 3}
+  icon: {fileID: 21300000, guid: 6c703ac56c1e1a544ae6c94edca34e19, type: 3}
+  pawn: {fileID: 186406, guid: 6b62a02aa56b3de4884194fb4e6943f1, type: 3}
   starRating: 2
   pawnQuality: 4
   upgradedPawn: {fileID: 0}
